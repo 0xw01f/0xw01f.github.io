@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link href="css/stars.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="A blog about computer science and more. You can find some original projects as well as CTF writeups for challenges !">
+  <meta name="author" content="w01f">
+  <meta name="keywords" content="blog IT cybersecurity programing coding tutorial CTF writeup security">
+  <title>How a mobile network is connected to the Internet - w01f</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/hybrid.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-101896722-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-101896722-2');
+</script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>w01f</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/articles/4g-network/back.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+	   
+ 	 
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-03 00:24" pubdate>
+        January 3, 2021 am
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2k words
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      40
+       min.
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+	<div id="stars-fade">
+            <div id="stars"></div>
+            <div id="stars2"></div>
+            <div id="stars3"></div>
+       </div>
+
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">How a mobile network is connected to the Internet</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h2 id="How-a-mobile-network-is-connected-to-the-Internet"><a href="#How-a-mobile-network-is-connected-to-the-Internet" class="headerlink" title="How a mobile network is connected to the Internet"></a>How a mobile network is connected to the Internet</h2><p>Have you ever wonder how you can get an internet access using only your phone, even without a WiFi connection ?</p>
+<p>First of all, the way to connect is not the same for 4G and 5G networks (I will only talk about these two technologies here), indeed, 5G brings a lot of new features and the “5G Core” is changing from the “4G Core”.</p>
+<h2 id="4G-Network"><a href="#4G-Network" class="headerlink" title="4G Network"></a>4G Network</h2><p>In 4G you are using a chip which is called a SIM (Subscriber Identification Module) card, this card contains your IMSI (International Mobile Subscriber Identity). Usually, you put this card in your mobile phone (can also be an IoT device, tablet, etc…). This device is called a UE (User Equipment), or terminal but I am gonna use the anme UE for this topic.<br>The UE has to connect to an eNodeB to access the network, which is an antenna with some emitters and receivers in a box next to the mast.</p>
+<p><img src="https://www.pngkey.com/png/full/352-3527988_learn-about-what-is-on-a-cell-tower.png" srcset="/img/loading.gif" alt="Cell Tower"><br>Diagram of a base station (eNB)</p>
+<p>These eNodeB’s are close enought to each other to ensure a permanent connection to an UE, even if the device is moving. They are all connected to the mobile network operator’s IP network (or 4G Core). This network is composed of different interfaces, such as:</p>
+<ul>
+<li>HSS (Home Subscriber Server)<ul>
+<li>Main database which contains all the data related to the users subscription, their IMSI to identify them on the network, and some data related on the location, security, status and profile of the user.</li>
+</ul>
+</li>
+<li>MME (Mobility Management Entity)<ul>
+<li>Database which is connected with some of the eNB’s, they store the inforamtions from the users in their area, to not overload the HSS of requests.</li>
+</ul>
+</li>
+<li>EIR (Equipment Identity Register)<ul>
+<li>Database to blacklist cloned or stolen phones by their IMEI.</li>
+</ul>
+</li>
+<li>PGW (Packet Data Network Gateway or Packet Gateway)<ul>
+<li>It constitutes a single gateway between the operator’s IP network and the Internet. It also provides some security functions. </li>
+</ul>
+</li>
+<li>SGW (Serving Gateway)<ul>
+<li>Its main function is routing and forwarding of user data packets. It is the entry point of data traffic for UE’s and it connects UE’s and PGW’s</li>
+</ul>
+</li>
+<li>PCRF (Policy and Charging Rules Function)<ul>
+<li>For Quality of Service (i.e. manage how much data an user is able to use) </li>
+</ul>
+</li>
+</ul>
+<p>These equipments are connected as follows:<br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Evolved_Packet_Core.svg/1148px-Evolved_Packet_Core.svg.png" srcset="/img/loading.gif" alt="Evolved Packet Core"></p>
+<p>Most of the interfaces I described are visible here, and you can see how they are connected to each other.<br><strong>It’s important to make a difference between the user plane traffic, which are the profile, status, location of an user and the control plane traffic which are the packets of a video, or a web page.</strong> These different data never communicate which each other.<br>User plane traffic is represented with the blue lines, and control plane traffic is represented with the yellow lines, above.</p>
+<p>On your first connection the MME doesn’t know you yet, only the HSS stores your information, and you don’t have an IP address.<br><img src="https://i.imgur.com/z4Ee56l.png" srcset="/img/loading.gif" alt="First connection"><br>Here you can see what is happening at your first connection.</p>
+<h2 id="4G-Security"><a href="#4G-Security" class="headerlink" title="4G Security"></a>4G Security</h2><p>I wanna talk a little bit about security, because it is extremely important. Let’s see different solutions for the following potential issues:</p>
+<ul>
+<li>Fraudulent use of the network<ul>
+<li>Solution: <strong>authentication</strong></li>
+</ul>
+</li>
+<li>Traffic sniffing<ul>
+<li>Solution: <strong>Encryption</strong></li>
+</ul>
+</li>
+<li>Data changes (changing the IP address on the attachment)<ul>
+<li>Solution: <strong>Integrity</strong></li>
+</ul>
+</li>
+<li>Follow/Locate an UE<ul>
+<li>Solution: <strong>Temporary identity</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="Authentication"><a href="#Authentication" class="headerlink" title="Authentication"></a>Authentication</h2><p>A number <em>k</em> is stored on both SIM card and HSS, and this number is only known by these.<br><img src="https://i.imgur.com/1NjHPo1.png" srcset="/img/loading.gif" alt="LTE Auth 1"><br>On authentication, the IMSI is sent to the HSS in <strong>clear text</strong>, then the HSS creates a challenge with <em>k</em> and a random number defined by the HSS.<br>With the encryption function <strong>f(RAND, <em>k</em>)</strong> the HSS creates the expected response (XRES).<br>The HSS sends the XRES and the random number (RAND) to the MME, which saves XRES and sends RAND to the UE.<br>Then, using <strong>f(RAND, <em>k</em>)</strong> the UE creates a response (RES) using the provided RAND and <em>k</em>.<br>(If the number <em>k</em> of that SIM card is the same number <em>k</em> that the one stored in the database of the HSS, <strong>RES</strong> equals to <strong>XRES</strong>).</p>
+<p>But using only this technique will result in some security issues. That’s why there are some additionnal protections.<br>Assume that an <strong>attacker</strong> created a fake network to be trusted by the UE, in this case the authentication method used so far isn’t strong enough. We have to add an extra layer of security, which is to check on the UE side that the mobile network operator’s IP network is a trusted network.<br>In order to do that, we will need an Authentication Token (AUTN) which is generated by the HSS using the function “<strong>g(RAND, <em>K</em>)</strong>“ (which is not the same that the function used to create XRES !).<br>AUTN is sent with XRES and RAND to the MME, which sends AUTN and RAND to the UE.<br>The UE is able to perform <strong>g(RAND, <em>K</em>)</strong>, which means that it is able to verify the IP network. If the network is identified as safe, the UE sends the RESponse to the MME to be verified, and authenticated.<br><strong>But</strong>… this configuration is vulnerable to a MITM (Man In The Middle) attack. Indeed, the attacker can easily listen to the Network, save the values of RAND and AUTN and pretend to be the real Network while sending these values to the victim’s UE. To prevent that, two successive authentications must lead to two different results. So we are gonna use a new parameter called SQN (SeQuence Number) in our request.<br><img src="https://i.imgur.com/SflK9FO.png" srcset="/img/loading.gif" alt="Secure Auth"><br>(This is done two times, to be sure that SQN changed)<br>Now, <strong>g()  = g(RABD, <em>K</em>, SQN)</strong>.<br>This parameter is gonna increment, and the UE can verify that SQN, which is provided in AUTN using the function <strong>g()</strong>, doesn’t have the same value than before.<br>If eveything is okay, the UE and the Network are authenticated by each other and they can now communicate.</p>
+<h2 id="Encryption"><a href="#Encryption" class="headerlink" title="Encryption"></a>Encryption</h2><p>The best way to prevent an attacker to get our messages is to encrypt them, so he cannot read them. Here the data is encrypted using XOR ()  which has two parameters as input. </p>
+<ul>
+<li>The data to encrypt</li>
+<li>An encryption sequence, generated by a strong encryption algorithm using a key called <em>Kenc</em></li>
+</ul>
+<p>If there is a lot of data to send, this data is sliced into different packets.<br>The encryption sequence is the result of a strong encryption algorithm, such as SNOW 3G for 3G, or AES (which is the best choice). No encryption can also be used, but it has to be for network testing <strong>ONLY</strong> !<br>For some security reasons, each packet has to be encrypted with a different encryption sequence.<br>To never have the same encryption sequence, five parameters that can change from a packet to another are given to the encryption algorithm:</p>
+<ul>
+<li>Kenc (RAND, key <em>k</em>)</li>
+<li>Packet Number</li>
+<li>Bearer</li>
+<li>Direction (Ascending, Descending)</li>
+<li>Packet size</li>
+</ul>
+<p>The algorithm to use and the encryption <em>key</em> are negociated during the UE’s authentication process. This key is the same during the whole data exchange (i.e. a web session).<br><img src="https://i.imgur.com/Vzia6Pt.png" srcset="/img/loading.gif" alt="Encryption datagram"></p>
+<p>The data is encrypted by the eNB and decrypted by the UE.<br>Or, it is encrypted by the UE and decrypted by the eNB.</p>
+<h2 id="Integrity"><a href="#Integrity" class="headerlink" title="Integrity"></a>Integrity</h2><p>It is important to verify the integrity of a message to be sure that it comes from the right place (i.e. facebook.com) and not from a malicious person. Also, it permits to verify if the message was not modified on his way between the server (facebook in my example) and the client (you, me). Due to a MITM attack for example.<br>To do this, for each data frame we add some bytes of information to it. These bytes are calculated with a hashing algorithm. They are called Message Authentication Code (MAC, but this has nothing to do with the MAC address of the physical layer of the OSI model). This code is coded on 21 bits for LTE networks.<br>This Code is calculated using the message to transmit, and then it is attached at the end of the message.<br>After that the message is checked by re-calculating the MAC code, and comparing it to the sended MAC code inside the received data.<br><img src="https://i.imgur.com/x5CTJ5I.png" srcset="/img/loading.gif" alt="Integrity Diagram"></p>
+<p>Note that this process is only used for control plane traffic (such as the data from a website going through a SGW/PGW) and never for user plane traffic (data from the HSS).</p>
+<p>But, just like the Encryption Sequence, the MAC must be always different. In order to do that, an encryption algorithm is used again.<br>But this time, the key is called <strong>K</strong>int and one of the parameters is the message (instead of the packet length).<br><img src="https://i.imgur.com/OkCXJW2.png" srcset="/img/loading.gif" alt="Integrity Algorithm Diagram"><br>The encryption algorithm can be SNOW 3G, for 3G networks, but usually it is AES.</p>
+<p><img src="https://i.imgur.com/gtNgRP8.png" srcset="/img/loading.gif" alt="Integrity &amp; Encryption Diagram"><br>The MAC code is added to the Packet, encrypted, and sent.</p>
+<h2 id="Secret-Key-Generation"><a href="#Secret-Key-Generation" class="headerlink" title="Secret Key Generation"></a>Secret Key Generation</h2><p>As you can see, the are some different secret keys for encryption. And there are a lot.<br>Let’s see how these are generated, and what they are for.<br>We have <strong>only one</strong> unique key K (constant) which is only stored inside the UE’s SIM card and the HSS. The HSS gives a key called <strong>K</strong>asme (Access Security Management Entity) to the MME, so it isn’t asked everytime someone needs to calculate a new key, this is now the responsibility of the MME’s. Of course, during this process the HSS asks for the identity of the network which is asking him a key.</p>
+<p><strong>K</strong>asme is now the main key for all the other keys, they are calculated using this key and some other parameters, with an encryption algorithm.<br><img src="https://i.imgur.com/jn5sOYJ.png" srcset="/img/loading.gif" alt="Secret keys generation Diagram"></p>
+<h2 id="Temporary-Identity"><a href="#Temporary-Identity" class="headerlink" title="Temporary Identity"></a>Temporary Identity</h2><p>The very first connection transfers (authentication) the IMSI in clear text, because at that moment it is not yet possible to encrypt the data transfer (between the UE and the eNB).<br>After the authentication and when the encryption is set, an identifier called <strong>TMSI</strong> (Temporary Mobile Subscriber Identity) is sent to the UE, which is his new identifier for all the upcomming communications. The TMSI is allocated by the current MME and the mobile operator can choose when this identifier is renewed. The TMSI is changed when a new MME is used, or when the SIM card is removed, for example.</p>
+<p>The TMSI is coded on 4 bytes (32 bits), but is not unique, two different MME’s can use the same TMSI to identify two different UE’s. That’s why the <strong>GUTI</strong> was created, it is the Globally Unique Temporary Identifier and is larger than the TMSI. The GUTI permits to the network to get the MME which allocated the TMSI.<br>Here’s what the GUTI looks like :<br><img src="https://i.imgur.com/ILktwdl.png" srcset="/img/loading.gif" alt="GUTI Diagram"><br>Due to these parameters, the GUTI is a worldwide unique identifier for an UE, and can be changed at any time by an MME.</p>
+<p>On a connection between the UE and the Network, the UE sends the GUTI and the MME is the only one which can link the GUTI and the IMSI of the subscriber. When When the UE wants to connect to the network, he sends his GUTI with his message, the MME checks the GUTI with the IMSI and then the MME checks the sended message to verify it’s integrity. If everything is okay, the UE is successfully authenticated. The MME activates the encryption and generates all the necessary keys on the eNB to ensure a secure connection.<br>Note that during this process, the HSS is not solicited and it suffers less traffic.</p>
+<p>If the UE changes his position and has to use a new MME, this new MME can identify and find the previous used MME using the GUTI and find the TMSI. And the UE can have a secure connection and doesn’t have to establish a whole new authentication process. And the HSS is not solicited.</p>
+<h2 id="5G-Networks"><a href="#5G-Networks" class="headerlink" title="5G Networks"></a>5G Networks</h2><p>Now we have seen how a 4G network works (globally), we can compare it to the fifth generation network.<br>But this article is long enough, and I wanna talk about 5G in a dedicated post.<br>See you!</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/mobile/">mobile</a>
+                    
+                      <a class="hover-with-bg" href="/tags/networking/">networking</a>
+                    
+                      <a class="hover-with-bg" href="/tags/4G/">4G</a>
+                    
+                  </div>
+                
+              </div>
+              
+
+		<br>
+		Share :  <a href="https://www.facebook.com/sharer/sharer.php?u=http://w01f.xyz/2021/01/03/How-a-mobile-network-is-connected-to-the-Internet/&t=How%20a%20mobile%20network%20is%20connected%20to%20the%20Internet" target="_blank" rel="noopener"> <i class="fa fa-facebook-square fa-2x"></i> | </a>   <a href="https://twitter.com/intent/tweet?text=%22How%20a%20mobile%20network%20is%20connected%20to%20the%20Internet%22%20http://w01f.xyz/2021/01/03/How-a-mobile-network-is-connected-to-the-Internet/%20via%20@hexojs" target="_blank" rel="noopener"> <i class="fa fa-twitter-square fa-2x"></i> | </a>   <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://w01f.xyz/2021/01/03/How-a-mobile-network-is-connected-to-the-Internet/&title=How%20a%20mobile%20network%20is%20connected%20to%20the%20Internet" target="_blank" rel="noopener"> <i class="fa fa-linkedin fa-2x"></i> </a>
+		<br>
+
+
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/01/16/Steganography-It-s-outside-the-box/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Steganography - It's outside the box</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/11/Challenge-Brigitte-Friang-COROS-CTF/">
+                        <span class="hidden-mobile">Challenge Brigitte Friang - COROS CTF</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+		
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "b70Y4vW45puW9piv90cgQhGG-MdYXbMMI",
+          app_key: "ccKemUSih2JTtCuBvaEm1jNy",
+          placeholder: "Write someting...",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "en",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="/" target="_blank" rel="nofollow noopener"><span>w01f</span></a>
+      <i class="iconfont icon-love"></i>
+      2020
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "How a mobile network is connected to the Internet&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 80,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'UA-101896722-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+    <!-- Google gtag.js -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-MM7R4WW"></script>
+    <script defer>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-MM7R4WW');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

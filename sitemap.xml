@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+            
+  
+  <url>
+    <loc>http://w01f.xyz/2021/01/16/Steganography-It-s-outside-the-box/</loc>
+    
+    <lastmod>2021-01-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/2020/10/01/Cicada-3301-Vol-1-TryHackMe-Writeup/</loc>
+    
+    <lastmod>2021-01-13</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/2021/01/03/How-a-mobile-network-is-connected-to-the-Internet/</loc>
+    
+    <lastmod>2021-01-03</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/about/index.html</loc>
+    
+    <lastmod>2020-11-19</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/2020/11/11/Challenge-Brigitte-Friang-Entry/</loc>
+    
+    <lastmod>2020-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/2020/11/11/Challenge-Brigitte-Friang-COROS-CTF/</loc>
+    
+    <lastmod>2020-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/2020/11/07/PluWeSh/</loc>
+    
+    <lastmod>2020-11-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/2020/10/01/Resources/</loc>
+    
+    <lastmod>2020-10-04</lastmod>
+    
+  </url>
+  
+
+  <url>
+    <loc>http://w01f.xyz/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  
+  <url>
+    <loc>http://w01f.xyz/tags/resources/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/writeup/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/tryhackme/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/CTF/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/challengecybersecfr/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/DGSE/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/ESIEE/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/powershell/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/script/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/digispark/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/hardware/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/project/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/mobile/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/networking/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/4G/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/steaganography/</loc>
+    <lastmod>2021-01-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+
+  
+</urlset>
+

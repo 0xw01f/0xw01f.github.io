@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link href="css/stars.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="A blog about computer science and more. You can find some original projects as well as CTF writeups for challenges !">
+  <meta name="author" content="w01f">
+  <meta name="keywords" content="blog IT cybersecurity programing coding tutorial CTF writeup security">
+  <title>Steganography - It&#39;s outside the box - w01f</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/hybrid.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-101896722-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-101896722-2');
+</script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>w01f</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/articles/OutBoxSteg/background.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+	   
+ 	 
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-16 01:53" pubdate>
+        January 16, 2021 am
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      941 words
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      18
+       min.
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+	<div id="stars-fade">
+            <div id="stars"></div>
+            <div id="stars2"></div>
+            <div id="stars3"></div>
+       </div>
+
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Steganography - It&#39;s outside the box</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <p>A few months ago I take part to a CTF, like usually I learned a lot of cool tricks and tips. But there was one steganography challenge which I found awesome.<br>I use to search in the exifs of a picture, check relevant strings, or try binwalk and other tools on it… But this is another way to hide informations in a picture (or from a picture, you’ll see).</p>
+<p>I will try to show you as good as possible how this works, and even how to create that challenge by your own :)</p>
+<p>First of all, this is for PNG images only, it works with GIFs as well and JPG I don’t think so.</p>
+<p>We only had a picture like this one :<br><img src="https://i.imgur.com/gOqSz7a.png" srcset="/img/loading.gif" alt="In The Box"><br>(This isn’t the image from the challenge I did)</p>
+<p>There is no hidden stuff in the picture above, because this technique corrupts the image data. If you wanna try to solve the challenge anyway, <a target="_blank" rel="noopener" href="https://gofile.io/d/NxrTWE">I uploaded it on gofile</a>.</p>
+<p>When you see a suspicious PNG image, I recommend to verify that it is actually a PNG image and that everything works fine. You can use <a target="_blank" rel="noopener" href="http://www.libpng.org/pub/png/apps/pngcheck.html">PNGCheck</a> to do that.</p>
+<p>As you can see here, there is a CRC error for the IHDR Chunk.Because he calculated the CRC checksum as <code>CBD6DF8A</code> but he found (and it should be) <code>C798A151</code> in the PNG data.<br><img src="https://i.imgur.com/pNj22bG.png" srcset="/img/loading.gif" alt="PNGCheck Result CRC error in IHDR Chunk"><br>If you wanna learn more about PNG Headers, I recommend <a target="_blank" rel="noopener" href="http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html">this</a>. To learn more about other headers, for GIF or JPG images, take a look at <a target="_blank" rel="noopener" href="https://medium.com/ios-os-x-development/prefetching-images-size-without-downloading-them-entirely-in-swift-5c2f8a6f82e9">this article</a>.<br>Also, you won’t be able to open the picture in Linux, due to that error.<br><img src="https://i.imgur.com/vJqHkff.png" srcset="/img/loading.gif" alt="CRC error on linux"></p>
+<p>The best thing to do now will be fixing that image, I can tell you two different methods in order to do that. It depends on if you wanna learn something or if you just wanna use tools that do some obscure things…<br>Anyway, I’m gonna start with the coolest one !</p>
+<h2 id="The-cool-method"><a href="#The-cool-method" class="headerlink" title="The cool method"></a>The cool method</h2><p>So, as PNGCheck says, it found <code>CBD6DF8A</code> as checksum in the image data, but it computed another checksum.<br>You probably want to know what <strong>image data</strong> is and what that <strong>checksum</strong> is about.</p>
+<p>The image data is reprensented in hexadecimal here, I created a transparent 10x10 pixel image to show you what it looks like.<br><img src="https://i.imgur.com/mLu5mIO.png" srcset="/img/loading.gif" alt="10x10 pixel transparent image"><br><em>you can use <a target="_blank" rel="noopener" href="https://hexed.it/">this website</a> to do that</em></p>
+<p>The middle bloc is the data in hexadecimal, that’s what we are looking for.<br>Each image has a signature to identify what image it is (PNG, JPG, GIF, …) and dome chunks.<br>Our PNG image contains a first chunk called <strong>IHDR</strong> chunk, and it contains<br>|                    |      |<br>|———————    |———    |<br>| Width                   | 4 bytes     |<br>| Height                  | 4 bytes     |<br>| Bit depth               | 1 byte      |<br>| Color type              | 1 byte      |<br>| Compression method      | 1 byte      |<br>| Filter method           | 1 byte      |<br>| Interlace method        | 1 byte      |</p>
+<p>It can be represented like this for a better comprehension:<br><img src="https://i.imgur.com/yWkt0C6.png" srcset="/img/loading.gif" alt="PNG Signature"><br><em>stolen from <a target="_blank" rel="noopener" href="https://medium.com/ios-os-x-development/prefetching-images-size-without-downloading-them-entirely-in-swift-5c2f8a6f82e9">here</a></em></p>
+<p>The rest of the data isn’t relevant for us in this case.</p>
+<p>If you look at the different informations in the IHDR chunk, you can see a CRC checksum at the end with a size of 4 bytes. This checksum is computed using the data in the IHDR chunk.<br>In our picture this chunk is corrupted, to repair it we just have to replace the expected checksum (<code>C798A151</code>) with the computed one (<code>CBD6DF8A</code>).<br><img src="https://i.imgur.com/ABZriA5.png" srcset="/img/loading.gif" alt="Before"><br><img src="https://i.imgur.com/l6uNw2V.png" srcset="/img/loading.gif" alt="After"></p>
+<p>Now the image should be repaired.<br>But we still have no information about hidden data…</p>
+<p>As I told you, the CRC checksum is computed using data like the height, width, bit depth, etc..<br>If the CRC checksum changed, that means that one (ore more) of these parameters changed too.<br>The easyest thing to verify are the dimensions of the image. </p>
+<p><img src="https://i.imgur.com/wJFZgxL.png" srcset="/img/loading.gif" alt="Dimensions Bytes"><br>These bytes define the image dimensions.<br>since it is a square, obviously the bytes are the same. The size, in hexadecimal, is <code>1F4</code>.<br>To convert that to decimal, you can use a hex to decimal converter like <a target="_blank" rel="noopener" href="https://www.rapidtables.com/convert/number/hex-to-decimal.html">this one</a>.<br><code>1F4</code> is equal to 500pixels.<br><img src="https://i.imgur.com/Jftz6no.png" srcset="/img/loading.gif" alt="Hex to decimal"><br>If we take a look at the iamge dimensions, indeed, it is 500x500 pixels<br><img src="https://i.imgur.com/xc5p3EA.png" srcset="/img/loading.gif" alt="Image Dimensions"></p>
+<p>So, we want to increase these dimensions, we just have to convert a decimal value to hex.<br>I am gonna choose twice the initial size, 1000px.<br><img src="https://i.imgur.com/caiw7LX.png" srcset="/img/loading.gif" alt="Decimal to Hex"></p>
+<p>And replace <code>1F4</code> from the height with <code>3E8</code> in out image. I choose only the height here, because I already know what data I have to change. Otherwise I would play around a little bit, to find out what I have to change.</p>
+<p><img src="https://i.imgur.com/ajca3MV.png" srcset="/img/loading.gif" alt="New height bytes"><br>Now, save the image.</p>
+<p>And…<br><img src="https://i.imgur.com/tLwvX1y.png" srcset="/img/loading.gif" alt="OutBox"><br><em>Awesome.</em></p>
+<h2 id="The-fast-method"><a href="#The-fast-method" class="headerlink" title="The fast method"></a>The fast method</h2><p>Of course, there are some tools to do all this much faster.<br>If you have an error with a PNG image, you can try to fix it using <a target="_blank" rel="noopener" href="https://github.com/sherlly/PCRT">PCRT</a>.<br>It is very easy to use.<br><img src="https://i.imgur.com/iT2tZiU.png" srcset="/img/loading.gif" alt="PCRT"></p>
+<p>Once you fiwed the errors, there is an nice tool called <a target="_blank" rel="noopener" href="http://entropymine.com/jason/tweakpng/">TweakPNG</a> to examine and modify PNG images.</p>
+<p>You just have to load the image and change the dimensions in the IHDR chunk.<br><img src="https://i.imgur.com/2uuPAgl.png" srcset="/img/loading.gif" alt="TweakPNG example"></p>
+<h2 id="How-to-make-one"><a href="#How-to-make-one" class="headerlink" title="How to make one"></a>How to make one</h2><p>Another fun thing is to re create a challenge.<br>This part is very easy, take an image and place your hidden content on it.<br>Now you know how to change the image dimensions, you can reverse the process and decrease the wanted dimensions.<br>But, please don’t use this method to hide sensitive data, that’s security by obscurity and so it’s not safe. Encrypting your data is always the best solution, however you can combine both.</p>
+<p>If you wonder if you can send that image to a friend.<br>Only if the CRC chunk is repaired, you can upload your image on imgur and share it.<br>The hidden data will remain in the image. If you try to upload it to instagram, or messenger it won’t work.</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/writeup/">writeup</a>
+                    
+                      <a class="hover-with-bg" href="/tags/CTF/">CTF</a>
+                    
+                      <a class="hover-with-bg" href="/tags/steaganography/">steaganography</a>
+                    
+                  </div>
+                
+              </div>
+              
+
+		<br>
+		Share :  <a href="https://www.facebook.com/sharer/sharer.php?u=http://w01f.xyz/2021/01/16/Steganography-It-s-outside-the-box/&t=Steganography%20-%20It's%20outside%20the%20box" target="_blank" rel="noopener"> <i class="fa fa-facebook-square fa-2x"></i> | </a>   <a href="https://twitter.com/intent/tweet?text=%22Steganography%20-%20It's%20outside%20the%20box%22%20http://w01f.xyz/2021/01/16/Steganography-It-s-outside-the-box/%20via%20@hexojs" target="_blank" rel="noopener"> <i class="fa fa-twitter-square fa-2x"></i> | </a>   <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://w01f.xyz/2021/01/16/Steganography-It-s-outside-the-box/&title=Steganography%20-%20It's%20outside%20the%20box" target="_blank" rel="noopener"> <i class="fa fa-linkedin fa-2x"></i> </a>
+		<br>
+
+
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/03/How-a-mobile-network-is-connected-to-the-Internet/">
+                        <span class="hidden-mobile">How a mobile network is connected to the Internet</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+		
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "b70Y4vW45puW9piv90cgQhGG-MdYXbMMI",
+          app_key: "ccKemUSih2JTtCuBvaEm1jNy",
+          placeholder: "Write someting...",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "en",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="/" target="_blank" rel="nofollow noopener"><span>w01f</span></a>
+      <i class="iconfont icon-love"></i>
+      2020
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Steganography - It's outside the box&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 80,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'UA-101896722-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+    <!-- Google gtag.js -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-MM7R4WW"></script>
+    <script defer>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-MM7R4WW');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

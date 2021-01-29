@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link href="css/stars.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="A blog about computer science and more. You can find some original projects as well as CTF writeups for challenges !">
+  <meta name="author" content="w01f">
+  <meta name="keywords" content="blog IT cybersecurity programing coding tutorial CTF writeup security">
+  <title>Challenge Brigitte Friang - Entry - w01f</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/hybrid.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-101896722-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-101896722-2');
+</script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>w01f</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/bf-homepage.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+	   
+ 	 
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-11-11 00:00" pubdate>
+        November 11, 2020 am
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.9k words
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      77
+       min.
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+	<div id="stars-fade">
+            <div id="stars"></div>
+            <div id="stars2"></div>
+            <div id="stars3"></div>
+       </div>
+
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Challenge Brigitte Friang - Entry</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h1 id="Challenge-Brigitte-Friang-write-up"><a href="#Challenge-Brigitte-Friang-write-up" class="headerlink" title="Challenge Brigitte Friang write-up"></a>Challenge Brigitte Friang write-up</h1><p>Organized by the <a target="_blank" rel="noopener" href="https://www.defense.gouv.fr/dgse">DGSE</a> and <a target="_blank" rel="noopener" href="https://www.esiee.fr/fr">ESIEE Paris</a></p>
+<p><img src="/img/bf-homepage.png" srcset="/img/loading.gif" alt="challengecybersec.fr homepage"><br>Website link: <a target="_blank" rel="noopener" href="https://challengecybersec.fr/">https://challengecybersec.fr</a><br>(It might not work anymore)</p>
+<p>We only had this website, because this is where it all starts.<br>Source code of the web page (<code>ctrl+u</code>) :<br><img src="/img/articles/challbrigittefriang/homepage-source.png" srcset="/img/loading.gif" alt="Homepage source code"><br>We can clearly see that there’s a hidden link.</p>
+<p>On this hidden link, /static/message-secret.html is a secret message.</p>
+<h2 id="Caesar"><a href="#Caesar" class="headerlink" title="Caesar"></a>Caesar</h2><div class="hljs"><pre><code class="hljs stata">Zp cvbz whyclulg <span class="hljs-keyword">h</span> spyl jl tlzzhnl, j&#x27;lza xbl cvbz wvbclg ylqvpukyl svwlyhapvu Iypnpaal Myphun. Ylqvpnulg-uvbz yhwpkltlua.
+
+Iypnpaal Myphun lza bul ylzpzahual, qvbyuhspzal <span class="hljs-keyword">la</span> ljypchpul myhujhpzl. Lssl lza ull sl 23/01/1924 <span class="hljs-keyword">h</span> Whypz, lssl <span class="hljs-keyword">h</span> 19 huz zvbz s&#x27;vjjbwhapvu svyzxb&#x27;lssl lza yljyball wbpz mvytll jvttl zljylahpyl/jopmmylbzl why bu hnlua kb IJYH, Qlhu-Myhujvpz Jsvbla klz Wlyybjolz hsphz Nhspsll jolm kb Ibylhb klz vwlyhapvuz hlypluulz (IVH) kl <span class="hljs-keyword">sh</span> Ylnpvu T (Jval kb Uvyk, Mpupzalyl, Pukyl <span class="hljs-keyword">la</span> Svpyl, Vyul, Zhyaol, Svpyl pumlyplbyl, Thpul <span class="hljs-keyword">la</span> Svpyl, Tvyipohu, Clukll). Iypnpaal Myphun bapspzl whymvpz klz mvbshykz wvby jhjoly klz jvklz. Jvtwslalg sBYS hclj spumvythapvu xbp lza jhjoll khuz jl tlzzhnl.
+
+Zbpal <span class="hljs-keyword">h</span> shyylzahapvu <span class="hljs-keyword">la</span> <span class="hljs-keyword">sh</span> ayhopzvu kl Wplyyl Thubls, Iypnpaal Myphun lza hyylall why <span class="hljs-keyword">sh</span> Nlzahwv. Lssl lza islzzll why ihssl lu aluahua kl zlumbpy <span class="hljs-keyword">la</span> lza jvukbpal <span class="hljs-keyword">h</span> sOvwpahs kl <span class="hljs-keyword">sh</span> Wpapl. Klz ylzpzahuaz alualyvua kl <span class="hljs-keyword">sh</span> spilyly thpz zhuz zbjjlz. Lssl lza avyabyll <span class="hljs-keyword">la</span> ul kvuulyh whz k&#x27;pumvythapvuz. Uvbisplg whz <span class="hljs-keyword">sh</span> ihyyl vispxbl. Lssl lza luzbpal lucvfll khuz sl jhtw kl Yhcluziybjr.
+
+Hwylz zvu ylavby kl klwvyahapvu, lssl whyapjpwl <span class="hljs-keyword">h</span> <span class="hljs-keyword">sh</span> jylhapvu kb Yhzzltisltlua kb wlbwsl myhuçhpz (YWM). Lssl pualnyl <span class="hljs-keyword">sh</span> wlapal lxbpwl, hbavby k&#x27;Hukyl Thsyhbe, xbp ch wylwhyly sl kpzjvbyz mvukhalby kl Zayhzivbyn lu 1947 <span class="hljs-keyword">la</span> slz lsljapvuz slnpzshapclz kl 1951.
+
+Lssl yluayl <span class="hljs-keyword">h</span> s&#x27;VYAM, <span class="hljs-keyword">la</span> klcplua jvyylzwvukhual kl nblyyl. Lssl viaplua zvu iylcla kl zhba lu whyhjobal <span class="hljs-keyword">la</span> hjjvtwhnul klz jvtthukvz kl whyhjobapzalz lu vwlyhapvu kbyhua <span class="hljs-keyword">sh</span> nblyyl kPukvjopul. Lssl yhjvual zvu lewlyplujl khuz Slz Mslbyz kb jpls (1955). K&#x27;hbaylz hnluaz zvua zby sl jvbw hb tvtlua vb ql cvbz whysl. Slz tlpsslbyz k&#x27;luayl cvbz zl kvuulyvua yluklg-cvbz <span class="hljs-keyword">h</span> s&#x27;Lbyvwlhu Jfilydllr <span class="hljs-keyword">h</span> Yluulz wvby bul yltpzl kl wype. Ylzvsclg sl wsbz k&#x27;lwylbclz hchua <span class="hljs-keyword">sh</span> mpu kl jlaal tpzzpvu <span class="hljs-keyword">la</span> alualg kl nhnuly cvayl wshjl whytp s&#x27;lspal! Why <span class="hljs-keyword">sh</span> zbpal, lssl jvbcyl slewlkpapvu kl Zblg, <span class="hljs-keyword">sh</span> nblyyl klz Zpe Qvbyz <span class="hljs-keyword">la</span> <span class="hljs-keyword">sh</span> nblyyl kb Cpla Uht. Lssl wyluk wvzpapvu lu mhclby k&#x27;bul hbavuvtpl kb qvbyuhspztl khuz sl zlycpjl wbispj jl xbp sbp chba k&#x27;layl spjlujpll kl s&#x27;VYAM.
+
+Lssl ljypa wsbzplbyz spcylz <span class="hljs-keyword">la</span> altvpnul kl s&#x27;lunhnltlua klz mlttlz khuz <span class="hljs-keyword">sh</span> Ylzpzahujl.</code></pre></div>
+
+<p>The title of that page is “caesar”, so I went to <a target="_blank" rel="noopener" href="https://gchq.github.io/CyberChef/">cyberchef</a> and used ROT13 to decode the message. I tried all the alterations until I found something relevant. And I had to use 19 alterations to find a correct message.</p>
+<div class="hljs"><pre><code class="hljs stata">Si vous parvenez a lire ce message, c&#x27;<span class="hljs-keyword">est</span> <span class="hljs-keyword">que</span> vous pouvez rejoindre loperation Brigitte Friang. Rejoignez-nous rapidement.
+
+Brigitte Friang <span class="hljs-keyword">est</span> une resistante, journaliste et ecrivaine francaise. Elle <span class="hljs-keyword">est</span> nee le 23/01/1924 a Paris, elle a 19 ans sous <span class="hljs-keyword">l</span>&#x27;occupation lorsqu&#x27;elle <span class="hljs-keyword">est</span> recrutee puis formee comme secretaire/chiffreuse par un agent du BCRA, Jean-Francois Clouet <span class="hljs-keyword">des</span> Perruches alias Galilee chef du Bureau <span class="hljs-keyword">des</span> operations aeriennes (BOA) <span class="hljs-keyword">de</span> <span class="hljs-keyword">la</span> Region <span class="hljs-keyword">M</span> (Cote du Nord, Finistere, Indre et Loire, Orne, Sarthe, Loire inferieure, Maine et Loire, Morbihan, Vendee). Brigitte Friang utilise parfois <span class="hljs-keyword">des</span> foulards pour cacher <span class="hljs-keyword">des</span> codes. Completez lURL avec linformation <span class="hljs-keyword">qui</span> <span class="hljs-keyword">est</span> cachee dans ce message.
+
+Suite a larrestation et <span class="hljs-keyword">la</span> trahison <span class="hljs-keyword">de</span> Pierre Manuel, Brigitte Friang <span class="hljs-keyword">est</span> arretee par <span class="hljs-keyword">la</span> Gestapo. Elle <span class="hljs-keyword">est</span> blessee par balle <span class="hljs-keyword">en</span> tentant <span class="hljs-keyword">de</span> senfuir et <span class="hljs-keyword">est</span> conduite a lHopital <span class="hljs-keyword">de</span> <span class="hljs-keyword">la</span> Pitie. <span class="hljs-keyword">Des</span> resistants tenteront <span class="hljs-keyword">de</span> <span class="hljs-keyword">la</span> liberer mais sans succes. Elle <span class="hljs-keyword">est</span> torturee et ne donnera pas <span class="hljs-keyword">d</span>&#x27;informations. Noubliez pas <span class="hljs-keyword">la</span> barre oblique. Elle <span class="hljs-keyword">est</span> ensuite envoyee dans le camp <span class="hljs-keyword">de</span> Ravensbruck.
+
+Apres son retour <span class="hljs-keyword">de</span> deportation, elle participe a <span class="hljs-keyword">la</span> creation du Rassemblement du peuple français (RPF). Elle integre <span class="hljs-keyword">la</span> petite equipe, autour <span class="hljs-keyword">d</span>&#x27;Andre Malraux, <span class="hljs-keyword">qui</span> va preparer le discours fondateur <span class="hljs-keyword">de</span> Strasbourg <span class="hljs-keyword">en</span> 1947 et les elections legislatives <span class="hljs-keyword">de</span> 1951.
+
+Elle rentre a <span class="hljs-keyword">l</span>&#x27;ORTF, et devient correspondante <span class="hljs-keyword">de</span> guerre. Elle obtient son brevet <span class="hljs-keyword">de</span> saut <span class="hljs-keyword">en</span> parachute et accompagne <span class="hljs-keyword">des</span> commandos <span class="hljs-keyword">de</span> parachutistes <span class="hljs-keyword">en</span> operation durant <span class="hljs-keyword">la</span> guerre dIndochine. Elle raconte son experience dans Les Fleurs du ciel (1955). <span class="hljs-keyword">D</span>&#x27;autres agents sont sur le coup au moment <span class="hljs-keyword">ou</span> je vous parle. Les meilleurs <span class="hljs-keyword">d</span>&#x27;entre vous <span class="hljs-keyword">se</span> donneront rendez-vous a <span class="hljs-keyword">l</span>&#x27;European Cyberweek a Rennes pour une remise <span class="hljs-keyword">de</span> prix. Resolvez le plus <span class="hljs-keyword">d</span>&#x27;epreuves avant <span class="hljs-keyword">la</span> fin <span class="hljs-keyword">de</span> cette mission et tentez <span class="hljs-keyword">de</span> gagner votre place parmi <span class="hljs-keyword">l</span>&#x27;elite! Par <span class="hljs-keyword">la</span> suite, elle couvre lexpedition <span class="hljs-keyword">de</span> Suez, <span class="hljs-keyword">la</span> guerre <span class="hljs-keyword">des</span> Six Jours et <span class="hljs-keyword">la</span> guerre du Viet Nam. Elle prend position <span class="hljs-keyword">en</span> faveur <span class="hljs-keyword">d</span>&#x27;une autonomie du journalisme dans le service public ce <span class="hljs-keyword">qui</span> lui vaut <span class="hljs-keyword">d</span>&#x27;etre licenciee <span class="hljs-keyword">de</span> <span class="hljs-keyword">l</span>&#x27;ORTF.
+
+Elle ecrit plusieurs livres et temoigne <span class="hljs-keyword">de</span> <span class="hljs-keyword">l</span>&#x27;engagement <span class="hljs-keyword">des</span> femmes dans <span class="hljs-keyword">la</span> Resistance.</code></pre></div>
+
+
+<p>There is another hidden message, indeed on the “message-secret.html” page we can see that some characters are in bold :</p>
+<p><img src="/img/articles/challbrigittefriang/caesar-bold.png" srcset="/img/loading.gif" alt="bold characters caesar"><br>We got this word:<br><code>/joha</code><br>And, of course we have to use caesar encryption on it such as on the whole text. And we got <code>/chat</code>.</p>
+<h2 id="Chatroom"><a href="#Chatroom" class="headerlink" title="Chatroom"></a>Chatroom</h2><p>Completing the domain with that location, (<code>challengecybersec.fr/chat</code>), opens something like a chatroom :</p>
+<p><img src="/img/articles/challbrigittefriang/chatr1.png" srcset="/img/loading.gif" alt="Agent 042"></p>
+<p>There are messages with other people, such as “Armand Richelieu”, “Antoine Rossignol” or “Jérémy Nitel”.<br><img src="/img/articles/challbrigittefriang/chatr2.png" srcset="/img/loading.gif" alt="Messages"></p>
+<p>From here we can choose one of the paths to get an entrance ticket.<br>But that, I didn’t know it yet. That was the easy part.</p>
+<p>I tried to go through all the paths, but I only had the time to do two of them.</p>
+<h2 id="Antoine-Rossignol-Cryptography"><a href="#Antoine-Rossignol-Cryptography" class="headerlink" title="Antoine Rossignol - Cryptography"></a>Antoine Rossignol - Cryptography</h2><p>Let’s begin with Antoine Rossignol’s cryptography challenge.</p>
+<p>Antoine Rossignol provided me some text files, encrypted files and pdf’s.<br>I have to discorver what’s inside “archive_chiffree”.</p>
+<p>The conversation:</p>
+<div class="hljs"><pre><code class="hljs apache"><span class="hljs-attribute">Antoine</span> Rossignol <span class="hljs-number">29</span>/<span class="hljs-number">09</span>/<span class="hljs-number">2020</span> : <span class="hljs-string">&quot;Un des nos agents a intercepté du matériel de chiffrement et un message chiffré émis par Evil Chems qui doit contenir des informations capitales sur la livraison de produits chimiques.&quot;</span>
+
+<span class="hljs-attribute">Agent</span> <span class="hljs-number">40</span> <span class="hljs-number">30</span>/<span class="hljs-number">09</span>/<span class="hljs-number">2020</span> : <span class="hljs-string">&quot;OK, on s&#x27;occupe de démonter le matériel pour analyse.&quot;</span>
+
+<span class="hljs-attribute">Agent</span> <span class="hljs-number">40</span> <span class="hljs-number">08</span>/<span class="hljs-number">10</span>/<span class="hljs-number">2020</span> : <span class="hljs-string">&quot;C&#x27;est plus compliqué que prévu! Le processeur ne fait qu&#x27;échanger des données avec un circuit intégré dédié (ASIC). On suppose qu&#x27;il contient l&#x27;algorithme de chiffrement et que la clé y est stockée en dur.&quot;</span>
+
+<span class="hljs-attribute">Antoine</span> Rossignol <span class="hljs-number">08</span>/<span class="hljs-number">10</span>/<span class="hljs-number">2020</span> : <span class="hljs-string">&quot; Envoyez en urgence l&#x27;ASIC à Eve Descartes d&#x27;ESIEE-Paris pour une rétro-conception matérielle&quot;</span>
+
+<span class="hljs-attribute">Agent</span> <span class="hljs-number">40</span> <span class="hljs-number">12</span>/<span class="hljs-number">10</span>/<span class="hljs-number">2020</span> : <span class="hljs-string">&quot;Eve Descartes a bien reçu le circuit. Elle s&#x27;en occupe en priorité.&quot;</span>
+
+<span class="hljs-attribute">Antoine</span> Rossignol <span class="hljs-number">23</span>/<span class="hljs-number">10</span>/<span class="hljs-number">2020</span> : <span class="hljs-string">&quot;Voici le compte-rendu d&#x27;Eve avec la cartographie de la zone étudiée. Il devient urgent de déchiffrer le message.&quot;</span></code></pre></div>
+
+<p>As I said I was given two PDF files, but Layout.pdf was protected with a password.<br>And here’s the other one:<br><img src="/img/articles/challbrigittefriang/Eve_Letter.png" srcset="/img/loading.gif" alt="Eve Letter"></p>
+<p>The most important informations were that theyachieved to do some hardware reverse engineering on the microchip. There semm to be two different areas, one which we can’t see which is probably the encryption key, and the other one should be the algorithm for that key, which we can see.<br>The algorithm is probably a <strong>well known</strong> standard encryption method.<br>They detected <strong>256</strong> programmable <strong>eFuses</strong>.<br>And they aren’t sure about the bit order and the MSB position.<br>Eve also said that we can contact her if we have an issue.</p>
+<p>She didn’t send me the password. So I called Her.<br>Also, sending her an email tells us to call her.<br><img src="/img/articles/challbrigittefriang/Eve_Letter_Contact.png" srcset="/img/loading.gif" alt="Eve Contact"></p>
+<p>And the answer was some morse :<br><audio controls src="/res/Morse Brigitte.mp3"></audio><br>Which gives me <code>.-. . ... .. ... - .- -. -.-. .</code><br>The first letter wasn’t audible, but I found out that the passwod was <code>resistance</code>.<br><img src="/img/articles/challbrigittefriang/Eve_Morse.png" srcset="/img/loading.gif" alt="Eve Morse"></p>
+<p>In the protected PDF we can see that picture:<br><img src="/img/articles/challbrigittefriang/eFuses.png" srcset="/img/loading.gif" alt="eFuses"><br>Which are clearly looking like fuses. Remember, eFuses !<br>There are exactly 256.</p>
+<blockquote>
+<p>In computing, eFuse is a technology invented by IBM which allows for the dynamic real-time reprogramming of computer chips. In the abstract, computer logic is generally “etched” or “hard-coded” onto a chip and cannot be changed after the chip has finished being manufactured. - Wikipedia </p>
+</blockquote>
+<p>I  immediately thought about binary when I saw that<br><img src="/img/articles/challbrigittefriang/eFuses2.png" srcset="/img/loading.gif" alt="eFuses"><br>I thought that <code>0</code> was for cutted fuse and <code>1</code> for non-cutted. That gave me this : </p>
+<div class="hljs"><pre><code class="hljs angelscript"><span class="hljs-number">1011111010111010101011001101111111001101110010101100100111011111101110101011110010111101110111111101111111011111110111111101111111011111110111111101111111011111110111111101111111011111110111111101111111011111110111111101111111011111110111111101111111011111</span></code></pre></div>
+<p>But I had to flip the bits, to get something like this :</p>
+<div class="hljs"><pre><code class="hljs angelscript"><span class="hljs-number">010000010100010101010011001000000110010001101010011011000100000010001010100001101000010001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000</span></code></pre></div>
+
+<p>Which means<br><code>AES 256 ECB                     </code><br><img src="/img/articles/challbrigittefriang/eFuse_Binary.png" srcset="/img/loading.gif" alt="eFuses"><br><code> Notice the lenght, it&#39;s very important</code></p>
+<p>Now, I have all the informations to decrypt the file.<br>On <a target="_blank" rel="noopener" href="https://gchq.github.io/CyberChef/">cyberchef</a> I used the following parameters:<br>KEY(utf8): AES 256 ECB                      (notice the spaces, the key have to be 32 bytes long)<br>IV: Nothing<br>Mode: ECB<br>Input: Raw<br>Output: Raw<br>GCM Tag: Nothing<br><img src="/img/articles/challbrigittefriang/AES_Descrypt.png" srcset="/img/loading.gif" alt="AES Decrypt"></p>
+<p>On my first try I copy/pasted the file content into cyberchef. But it didn’t work so I opened the file as input.<br>And then I got an output:<br><img src="/img/articles/challbrigittefriang/AES_Result.png" srcset="/img/loading.gif" alt="AES Result"></p>
+<p>This is a ZIP file, so I saved the output to a file with the .zip extension.<br>And here it is :<br><img src="/img/articles/challbrigittefriang/AES_ZIP.png" srcset="/img/loading.gif" alt="AES ZIP"></p>
+<p>There is a password protected PDF and a message from Evil Chems<br><img src="/img/articles/challbrigittefriang/Maths.png" srcset="/img/loading.gif" alt="Maths"><br>Oh god… it probably means that I have to do maths…<br>(Yeah, cryptography)</p>
+<p>After I watched nearly one hour of math videos about congruence, and I finally discovered how it works.<br>And I used dcode’s modular equation calculator to do it with big numbers.<br><a target="_blank" rel="noopener" href="https://www.dcode.fr/modular-equation-solver">https://www.dcode.fr/modular-equation-solver</a></p>
+<p>x  573[8387] (Result is x = 5622)<br>x  98[9613] (Results are x = 5622 OR x = 5964 OR x = 7640)<br>x  2726[7927] (Results are x = 2589 OR x = 5622 OR x = 7643)</p>
+<p>The result 5622 appears each time, so I can assume that this is the password. And it was.<br>The password for the protected PDF was 5622.</p>
+<p>Now we have this message:<br><img src="/img/articles/challbrigittefriang/instructions1.png" srcset="/img/loading.gif" alt="Instructions 2"><br>And.. yeah, maths, again.</p>
+<p>This time, what is used is called Galois Field (<code>GF(256)</code>), also called finite field.<br>I won’t go into the details, because I could make a lot of mistakes…<br>Howewer, this is widely used in cryptography and all I can say, is that this is used by AES encryption.</p>
+<p>We also have a encrypted password (<code>0xAF3A5E20A63AD0</code>), this password has 7 bytes (<code>AF 3A 5E 20 A6 3A D0</code>) and when I convert that with a multiplicative inverse table, it gives me something like this:</p>
+<p><code>62 20 61 3A 65 20 7A</code><br>Here’s the table I used:</p>
+<center>
+<table border>
+<tr><th colspan=18>Table of multiplicative inverses: rs*inv(rs) = 01</th></tr>
+<tr><th colspan=2 rowspan=2>inv(rs)</th><th colspan=16>s</th></tr><tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th></tr><tr><th rowspan=17>r</th></tr>
+<tr><th>&nbsp;0&nbsp;</th><td>&nbsp;XX&nbsp;</td><td>&nbsp;01&nbsp;</td><td>&nbsp;8d&nbsp;</td><td>&nbsp;f6&nbsp;</td><td>&nbsp;cb&nbsp;</td><td>&nbsp;52&nbsp;</td><td>&nbsp;7b&nbsp;</td><td>&nbsp;d1&nbsp;</td><td>&nbsp;e8&nbsp;</td><td>&nbsp;4f&nbsp;</td><td>&nbsp;29&nbsp;</td><td>&nbsp;c0&nbsp;</td><td>&nbsp;b0&nbsp;</td><td>&nbsp;e1&nbsp;</td><td>&nbsp;e5&nbsp;</td><td>&nbsp;c7&nbsp;</td></tr>
+<tr><th>&nbsp;1&nbsp;</th><td>&nbsp;74&nbsp;</td><td>&nbsp;b4&nbsp;</td><td>&nbsp;aa&nbsp;</td><td>&nbsp;4b&nbsp;</td><td>&nbsp;99&nbsp;</td><td>&nbsp;2b&nbsp;</td><td>&nbsp;60&nbsp;</td><td>&nbsp;5f&nbsp;</td><td>&nbsp;58&nbsp;</td><td>&nbsp;3f&nbsp;</td><td>&nbsp;fd&nbsp;</td><td>&nbsp;cc&nbsp;</td><td>&nbsp;ff&nbsp;</td><td>&nbsp;40&nbsp;</td><td>&nbsp;ee&nbsp;</td><td>&nbsp;b2&nbsp;</td></tr>
+<tr><th>&nbsp;2&nbsp;</th><td>&nbsp;3a&nbsp;</td><td>&nbsp;6e&nbsp;</td><td>&nbsp;5a&nbsp;</td><td>&nbsp;f1&nbsp;</td><td>&nbsp;55&nbsp;</td><td>&nbsp;4d&nbsp;</td><td>&nbsp;a8&nbsp;</td><td>&nbsp;c9&nbsp;</td><td>&nbsp;c1&nbsp;</td><td>&nbsp;0a&nbsp;</td><td>&nbsp;98&nbsp;</td><td>&nbsp;15&nbsp;</td><td>&nbsp;30&nbsp;</td><td>&nbsp;44&nbsp;</td><td>&nbsp;a2&nbsp;</td><td>&nbsp;c2&nbsp;</td></tr>
+<tr><th>&nbsp;3&nbsp;</th><td>&nbsp;2c&nbsp;</td><td>&nbsp;45&nbsp;</td><td>&nbsp;92&nbsp;</td><td>&nbsp;6c&nbsp;</td><td>&nbsp;f3&nbsp;</td><td>&nbsp;39&nbsp;</td><td>&nbsp;66&nbsp;</td><td>&nbsp;42&nbsp;</td><td>&nbsp;f2&nbsp;</td><td>&nbsp;35&nbsp;</td><td>&nbsp;20&nbsp;</td><td>&nbsp;6f&nbsp;</td><td>&nbsp;77&nbsp;</td><td>&nbsp;bb&nbsp;</td><td>&nbsp;59&nbsp;</td><td>&nbsp;19&nbsp;</td></tr>
+<tr><th>&nbsp;4&nbsp;</th><td>&nbsp;1d&nbsp;</td><td>&nbsp;fe&nbsp;</td><td>&nbsp;37&nbsp;</td><td>&nbsp;67&nbsp;</td><td>&nbsp;2d&nbsp;</td><td>&nbsp;31&nbsp;</td><td>&nbsp;f5&nbsp;</td><td>&nbsp;69&nbsp;</td><td>&nbsp;a7&nbsp;</td><td>&nbsp;64&nbsp;</td><td>&nbsp;ab&nbsp;</td><td>&nbsp;13&nbsp;</td><td>&nbsp;54&nbsp;</td><td>&nbsp;25&nbsp;</td><td>&nbsp;e9&nbsp;</td><td>&nbsp;09&nbsp;</td></tr>
+<tr><th>&nbsp;5&nbsp;</th><td>&nbsp;ed&nbsp;</td><td>&nbsp;5c&nbsp;</td><td>&nbsp;05&nbsp;</td><td>&nbsp;ca&nbsp;</td><td>&nbsp;4c&nbsp;</td><td>&nbsp;24&nbsp;</td><td>&nbsp;87&nbsp;</td><td>&nbsp;bf&nbsp;</td><td>&nbsp;18&nbsp;</td><td>&nbsp;3e&nbsp;</td><td>&nbsp;22&nbsp;</td><td>&nbsp;f0&nbsp;</td><td>&nbsp;51&nbsp;</td><td>&nbsp;ec&nbsp;</td><td>&nbsp;61&nbsp;</td><td>&nbsp;17&nbsp;</td></tr>
+<tr><th>&nbsp;6&nbsp;</th><td>&nbsp;16&nbsp;</td><td>&nbsp;5e&nbsp;</td><td>&nbsp;af&nbsp;</td><td>&nbsp;d3&nbsp;</td><td>&nbsp;49&nbsp;</td><td>&nbsp;a6&nbsp;</td><td>&nbsp;36&nbsp;</td><td>&nbsp;43&nbsp;</td><td>&nbsp;f4&nbsp;</td><td>&nbsp;47&nbsp;</td><td>&nbsp;91&nbsp;</td><td>&nbsp;df&nbsp;</td><td>&nbsp;33&nbsp;</td><td>&nbsp;93&nbsp;</td><td>&nbsp;21&nbsp;</td><td>&nbsp;3b&nbsp;</td></tr>
+<tr><th>&nbsp;7&nbsp;</th><td>&nbsp;79&nbsp;</td><td>&nbsp;b7&nbsp;</td><td>&nbsp;97&nbsp;</td><td>&nbsp;85&nbsp;</td><td>&nbsp;10&nbsp;</td><td>&nbsp;b5&nbsp;</td><td>&nbsp;ba&nbsp;</td><td>&nbsp;3c&nbsp;</td><td>&nbsp;b6&nbsp;</td><td>&nbsp;70&nbsp;</td><td>&nbsp;d0&nbsp;</td><td>&nbsp;06&nbsp;</td><td>&nbsp;a1&nbsp;</td><td>&nbsp;fa&nbsp;</td><td>&nbsp;81&nbsp;</td><td>&nbsp;82&nbsp;</td></tr>
+<tr><th>&nbsp;8&nbsp;</th><td>&nbsp;83&nbsp;</td><td>&nbsp;7e&nbsp;</td><td>&nbsp;7f&nbsp;</td><td>&nbsp;80&nbsp;</td><td>&nbsp;96&nbsp;</td><td>&nbsp;73&nbsp;</td><td>&nbsp;be&nbsp;</td><td>&nbsp;56&nbsp;</td><td>&nbsp;9b&nbsp;</td><td>&nbsp;9e&nbsp;</td><td>&nbsp;95&nbsp;</td><td>&nbsp;d9&nbsp;</td><td>&nbsp;f7&nbsp;</td><td>&nbsp;02&nbsp;</td><td>&nbsp;b9&nbsp;</td><td>&nbsp;a4&nbsp;</td></tr>
+<tr><th>&nbsp;9&nbsp;</th><td>&nbsp;de&nbsp;</td><td>&nbsp;6a&nbsp;</td><td>&nbsp;32&nbsp;</td><td>&nbsp;6d&nbsp;</td><td>&nbsp;d8&nbsp;</td><td>&nbsp;8a&nbsp;</td><td>&nbsp;84&nbsp;</td><td>&nbsp;72&nbsp;</td><td>&nbsp;2a&nbsp;</td><td>&nbsp;14&nbsp;</td><td>&nbsp;9f&nbsp;</td><td>&nbsp;88&nbsp;</td><td>&nbsp;f9&nbsp;</td><td>&nbsp;dc&nbsp;</td><td>&nbsp;89&nbsp;</td><td>&nbsp;9a&nbsp;</td></tr>
+<tr><th>&nbsp;a&nbsp;</th><td>&nbsp;fb&nbsp;</td><td>&nbsp;7c&nbsp;</td><td>&nbsp;2e&nbsp;</td><td>&nbsp;c3&nbsp;</td><td>&nbsp;8f&nbsp;</td><td>&nbsp;b8&nbsp;</td><td>&nbsp;65&nbsp;</td><td>&nbsp;48&nbsp;</td><td>&nbsp;26&nbsp;</td><td>&nbsp;c8&nbsp;</td><td>&nbsp;12&nbsp;</td><td>&nbsp;4a&nbsp;</td><td>&nbsp;ce&nbsp;</td><td>&nbsp;e7&nbsp;</td><td>&nbsp;d2&nbsp;</td><td>&nbsp;62&nbsp;</td></tr>
+<tr><th>&nbsp;b&nbsp;</th><td>&nbsp;0c&nbsp;</td><td>&nbsp;e0&nbsp;</td><td>&nbsp;1f&nbsp;</td><td>&nbsp;ef&nbsp;</td><td>&nbsp;11&nbsp;</td><td>&nbsp;75&nbsp;</td><td>&nbsp;78&nbsp;</td><td>&nbsp;71&nbsp;</td><td>&nbsp;a5&nbsp;</td><td>&nbsp;8e&nbsp;</td><td>&nbsp;76&nbsp;</td><td>&nbsp;3d&nbsp;</td><td>&nbsp;bd&nbsp;</td><td>&nbsp;bc&nbsp;</td><td>&nbsp;86&nbsp;</td><td>&nbsp;57&nbsp;</td></tr>
+<tr><th>&nbsp;c&nbsp;</th><td>&nbsp;0b&nbsp;</td><td>&nbsp;28&nbsp;</td><td>&nbsp;2f&nbsp;</td><td>&nbsp;a3&nbsp;</td><td>&nbsp;da&nbsp;</td><td>&nbsp;d4&nbsp;</td><td>&nbsp;e4&nbsp;</td><td>&nbsp;0f&nbsp;</td><td>&nbsp;a9&nbsp;</td><td>&nbsp;27&nbsp;</td><td>&nbsp;53&nbsp;</td><td>&nbsp;04&nbsp;</td><td>&nbsp;1b&nbsp;</td><td>&nbsp;fc&nbsp;</td><td>&nbsp;ac&nbsp;</td><td>&nbsp;e6&nbsp;</td></tr>
+<tr><th>&nbsp;d&nbsp;</th><td>&nbsp;7a&nbsp;</td><td>&nbsp;07&nbsp;</td><td>&nbsp;ae&nbsp;</td><td>&nbsp;63&nbsp;</td><td>&nbsp;c5&nbsp;</td><td>&nbsp;db&nbsp;</td><td>&nbsp;e2&nbsp;</td><td>&nbsp;ea&nbsp;</td><td>&nbsp;94&nbsp;</td><td>&nbsp;8b&nbsp;</td><td>&nbsp;c4&nbsp;</td><td>&nbsp;d5&nbsp;</td><td>&nbsp;9d&nbsp;</td><td>&nbsp;f8&nbsp;</td><td>&nbsp;90&nbsp;</td><td>&nbsp;6b&nbsp;</td></tr>
+<tr><th>&nbsp;e&nbsp;</th><td>&nbsp;b1&nbsp;</td><td>&nbsp;0d&nbsp;</td><td>&nbsp;d6&nbsp;</td><td>&nbsp;eb&nbsp;</td><td>&nbsp;c6&nbsp;</td><td>&nbsp;0e&nbsp;</td><td>&nbsp;cf&nbsp;</td><td>&nbsp;ad&nbsp;</td><td>&nbsp;08&nbsp;</td><td>&nbsp;4e&nbsp;</td><td>&nbsp;d7&nbsp;</td><td>&nbsp;e3&nbsp;</td><td>&nbsp;5d&nbsp;</td><td>&nbsp;50&nbsp;</td><td>&nbsp;1e&nbsp;</td><td>&nbsp;b3&nbsp;</td></tr>
+<tr><th>&nbsp;f&nbsp;</th><td>&nbsp;5b&nbsp;</td><td>&nbsp;23&nbsp;</td><td>&nbsp;38&nbsp;</td><td>&nbsp;34&nbsp;</td><td>&nbsp;68&nbsp;</td><td>&nbsp;46&nbsp;</td><td>&nbsp;03&nbsp;</td><td>&nbsp;8c&nbsp;</td><td>&nbsp;dd&nbsp;</td><td>&nbsp;9c&nbsp;</td><td>&nbsp;7d&nbsp;</td><td>&nbsp;a0&nbsp;</td><td>&nbsp;cd&nbsp;</td><td>&nbsp;1a&nbsp;</td><td>&nbsp;41&nbsp;</td><td>&nbsp;1c&nbsp;</td></tr>
+</table></center>
+Source: http://www.cs.utsa.edu/~wagner/laws/FFM.html
+
+<p>Here’s an example for the first byte, how I found its multiplicative inverse:<br><img src="/img/articles/challbrigittefriang/multi_inverse.png" srcset="/img/loading.gif" alt="Multiplicative Inverse Example"></p>
+<p>Now I have to decode these bytes to ASCII:<br>62 -&gt; b<br>20 -&gt; space<br>61 -&gt; a<br>3A -&gt; :<br>65 -&gt; e<br>20 -&gt; space<br>7A -&gt; z<br>The password seemed to be <code>b a:e z</code> so I sent that to Antoine Rossignol.<br><img src="/img/articles/challbrigittefriang/response2.png" srcset="/img/loading.gif" alt="Response"><br>And I was correct !</p>
+<p>And this directory is the final step to access the real CTF.<br>And that’s how I got my second entry ticket !</p>
+<h2 id="Jeremy-Nitel-Web"><a href="#Jeremy-Nitel-Web" class="headerlink" title="Jeremy Nitel - Web"></a>Jeremy Nitel - Web</h2><p>This time I’m gonna attack the web challenge.</p>
+<p>Stockos, a storage service is suspected to be a transit point for ware linked to a massacre of resistance fighters.<br>And apparently the credentials are extremely weak.<br><img src="/img/articles/challbrigittefriang/stockos_main.png" srcset="/img/loading.gif" alt="Stockos login page"><br> So, I tried <code>admin:admin</code> and I was in.</p>
+<p>I had to perform an SQL injection on the stock page.<br><img src="/img/articles/challbrigittefriang/stockos_stocks.png" srcset="/img/loading.gif" alt="Stockos stocks"></p>
+<p>With this SQL command I could find Evil Gouv’s email address<br><code>1&#39; UNION SELECT id, name, email, 1, 1 FROM stockos.customer #</code><br>I learned a lot about SQL injections with this.<br>Which is <img src="/img/articles/challbrigittefriang/stockos_email.png" srcset="/img/loading.gif" alt="Stockos eMail"><br><code>agent.malice@secret.evil.gov.ev</code></p>
+<p>Then it was told me to book a flight on evil air’s website:<br><a target="_blank" rel="noopener" href="https://www.challengecybersec.fr/35e334a1ef338faf064da9eb5f861d3c/">https://www.challengecybersec.fr/35e334a1ef338faf064da9eb5f861d3c/</a><br><img src="/img/articles/challbrigittefriang/evilair_main.png" srcset="/img/loading.gif" alt="EvilAir Homepage"></p>
+<p>The flight is called ABDJI6<br>And it have to be from 26/10/2020 to 28/10/2020<br>From Bad City to Evil City<br>And… I should think about taking sunscreen, because the sun is beating down there.. hmm<br>Probably because it’s evil.</p>
+<p>I created an account (I was warned to not use my usual credentials, and use a tempmail), with these informations:<br>name: ninja<br>mail: <a href="mailto:&#x6e;&#x69;&#x6e;&#106;&#97;&#x40;&#x6e;&#105;&#x6e;&#106;&#97;&#109;&#x61;&#105;&#108;&#x2e;&#x78;&#x79;&#x7a;">&#x6e;&#x69;&#x6e;&#106;&#97;&#x40;&#x6e;&#105;&#x6e;&#106;&#97;&#109;&#x61;&#105;&#108;&#x2e;&#x78;&#x79;&#x7a;</a><br>password: BFSRpx!4E…</p>
+<p>Here’s the confirmation email they send me:<br><img src="/img/articles/challbrigittefriang/evilair_mail.png" srcset="/img/loading.gif" alt="EvilAir confirmation email"></p>
+<blockquote>
+<p>Prêt à voyager au pays des merveilles ?<br>Activez vôtre compte dès maintenant !<br><a target="_blank" rel="noopener" href="http://challengecybersec.fr/35e334a1ef338faf064da9eb5f861d3c/activate/bmluamFAbmluamFtYWlsLnh5eg==">http://challengecybersec.fr/35e334a1ef338faf064da9eb5f861d3c/activate/bmluamFAbmluamFtYWlsLnh5eg==</a><br>Vous avez jusqu’à Tue Nov 03 2020 04:36:50 GMT+0000 (Coordinated Universal Time) le faire</p>
+</blockquote>
+<p>Looks like a phishing mail lol:<br><img src="/img/articles/challbrigittefriang/evilphish.png" srcset="/img/loading.gif" alt="evilphish"><br><img src="/img/articles/challbrigittefriang/evilphish2.png" srcset="/img/loading.gif" alt="evilphish"></p>
+<p>Anyway,<br>The generated link basically just activated my account.<br>And the base64 is the email address I used, encoded in base64.<br><em>hmmm</em></p>
+<p>Okay, let’s book that flight.</p>
+<p><img src="/img/articles/challbrigittefriang/evilair_book_fail.png" srcset="/img/loading.gif" alt="EvilAir booking"><br>(I wanted a flight in business class, but unfortunately they didn’t take it into consideration…)</p>
+<p>And I couldn’t book that destination.<br><img src="/img/articles/challbrigittefriang/evilair_book_fail2.png" srcset="/img/loading.gif" alt="evilair fail 2"><br>On my profile page they said that I don’t have an “Authorized profile”<br><img src="/img/articles/challbrigittefriang/evilair_unauthorized_profile.png" srcset="/img/loading.gif" alt="evilair unauthorized"></p>
+<p>That’s not nice… let’s see the cookies.<br><img src="/img/articles/challbrigittefriang/evilair_cookie.png" srcset="/img/loading.gif" alt="evilair cookies"><br>Nothing really interesting.</p>
+<p>Okay, then I thought I had to extract the password from agent.malice<br>Because they warned me that the informations are in clear in the database.<br>But I found nothing.</p>
+<p>Then, I decided to use the password recovery function of the website. They send me a recovery link, which contains my email in base64.<br>This is very similar to the activation link.<br><img src="/img/articles/challbrigittefriang/evilair_mail2.png" srcset="/img/loading.gif" alt="Evil air activation mail"><br>And, this link gives me my password in clear text<br><img src="/img/articles/challbrigittefriang/evilair_passreset.png" srcset="/img/loading.gif" alt="evilair password clear"></p>
+<p>I tried to do the same thing with agent malice’s email address, I converted his email to base64 and replaced my token with that.<br>And it shows up the following password:<br>Superlongpassword666</p>
+<p>I’m now authorized :<br><img src="/img/articles/challbrigittefriang/evilair_ticket_qr.png" srcset="/img/loading.gif" alt="EvilAir Ticket"></p>
+<p>And I can see my flight at “bookings”<br><img src="/img/articles/challbrigittefriang/evilphish.png" srcset="/img/loading.gif" alt="evilphish"><br>The QR Code gives me the flag:<br>DGSESIEE{2cd992f9b2319860ce3a35db6673a9b8}</p>
+<p>And when I send it to Jérémy, he gave me another mission.<br><img src="/img/articles/challbrigittefriang/web_flag.png" srcset="/img/loading.gif" alt="Web Flag"></p>
+<p>In this one I have to find a hidden communication, inside the pcap file.<br>And I found out that the messages are TLS encrypted.<br><img src="/img/articles/challbrigittefriang/trammes-ws.png" srcset="/img/loading.gif" alt="Wireshark Packets"></p>
+<p>I extracted the certificate from the handshake, and used <a target="_blank" rel="noopener" href="https://github.com/Ganapati/RsaCtfTool">Ganapati’s RsaCtfTool</a> to get the private key.<br>This is working because the public key of the certificate (RSA key) is weak.</p>
+<p>Wireshark is configurable to decrypt SSL when we give him a private key.<br>This is pretty easy. Go to <code>&#39;Edit&#39; -&gt; &#39;Preferences&#39;</code><br><img src="/img/articles/challbrigittefriang/ws_add_key.png" srcset="/img/loading.gif" alt="Add key"><br>And in the ‘protocol’ section, find ‘TLS’ or ‘SSL’<br><img src="/img/articles/challbrigittefriang/ws_add_key2.png" srcset="/img/loading.gif" alt="Add key"><br>And import the private key<br><img src="/img/articles/challbrigittefriang/ws_add_key3.png" srcset="/img/loading.gif" alt="Add key"></p>
+<p>Victory is near.</p>
+<p>I had to find the most relevant message (it was in red)<br><img src="/img/articles/challbrigittefriang/trammes-ws2.png" srcset="/img/loading.gif" alt="Wireshark packets"><br>And get the TLS decrypted content :<br><img src="/img/articles/challbrigittefriang/ws_decrypted.png" srcset="/img/loading.gif" alt="TLS Decrypted Message"></p>
+<blockquote>
+<p>OST /7a144cdc500b28e80cf760d60aca2ed3 HTTP/1.1<br>Host: 192.168.29.7<br>User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,<em>/</em>;q=0.8<br>Accept-Language: en-US,en;q=0.5<br>Accept-Encoding: gzip, deflate, br<br>Referer: <a target="_blank" rel="noopener" href="https://192.168.29.7/">https://192.168.29.7/</a><br>Content-Type: application/x-www-form-urlencoded<br>Content-Length: 13<br>Connection: keep-alive<br>Upgrade-Insecure-Requests: 1<br>password=test</p>
+</blockquote>
+<p>And there’s a hash, which looks like the previous directories we had.<br>Let’s put that after the URL:<br><img src="/img/articles/challbrigittefriang/coros_ctf.png" srcset="/img/loading.gif" alt="Coros CTF entry page"><br>And that’s how I got my entry ticket to the CTF !</p>
+<h2 id="Blaise-Pascal-Algorithms"><a href="#Blaise-Pascal-Algorithms" class="headerlink" title="Blaise Pascal - Algorithms"></a>Blaise Pascal - Algorithms</h2><p>I didn’t complete this challenge, but I wanna show you the first part.</p>
+<p>Two files were given to me, an original, and an intercepted file, which is supposed to contain a hidden message.</p>
+<p>the first thing we can see by comparing these two files is that, indeed, there are some additionnal characters in the intercepted file.<br>Original:<br><img src="/img/articles/challbrigittefriang/pascal_original.png" srcset="/img/loading.gif" alt="original file"></p>
+<p>Intercepted:<br><img src="/img/articles/challbrigittefriang/pascal_intercepted.png" srcset="/img/loading.gif" alt="intercepted file"></p>
+<p>These files contain about 311762 characters, for the lightest, so i’m not gonna comapre them by hand.<br>So I created a python script :</p>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># Import array, to use arrays</span>
+<span class="hljs-keyword">from</span> array <span class="hljs-keyword">import</span> array
+
+<span class="hljs-comment"># Open two files to compare</span>
+original = open(<span class="hljs-string">&quot;C:\\Users\\Cookie\\Downloads\\original.txt&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>)
+intercepte = open(<span class="hljs-string">&quot;C:\\Users\\Cookie\\Downloads\\intercepte.txt&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>)
+
+<span class="hljs-comment"># Create two byte arrays </span>
+x_original = array(<span class="hljs-string">&#x27;b&#x27;</span>)
+x_intercepte = array(<span class="hljs-string">&#x27;b&#x27;</span>)
+x_result = array(<span class="hljs-string">&#x27;b&#x27;</span>)
+
+<span class="hljs-comment"># Assign a file to each byte array</span>
+x_original.frombytes(original.read().encode())
+x_intercepte.frombytes(intercepte.read().encode())
+
+<span class="hljs-comment"># Check each item in arrays, and compare them one by one</span>
+f = open(<span class="hljs-string">&quot;C:\\Users\\Cookie\\Downloads\\x_result_algo.txt&quot;</span>, <span class="hljs-string">&quot;a&quot;</span>)
+
+<span class="hljs-comment"># For each character in the intercepted file, write extra caracter to file and delete it</span>
+<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> range(len(x_intercepte)):
+    <span class="hljs-keyword">while</span> x_intercepte[c]!= x_original[c]:
+        f.write(chr(x_intercepte[c]))
+        x_intercepte.pop(c)
+
+<span class="hljs-comment"># Close the file</span>
+f.close()
+
+<span class="hljs-comment"># This script will end with a &#x27;array index out of range&#x27; error, this is completely normal</span>
+</code></pre></div>
+
+<p>I had a lot of issues with this, but finally everything is fine.<br>Some corrupted images I had :<br><img src="/img/articles/challbrigittefriang/pascal_script_fail.png" srcset="/img/loading.gif" alt="Corrupted 1"><br><img src="/img/articles/challbrigittefriang/pascal_script_fail2.png" srcset="/img/loading.gif" alt="Corrupted 2"><br>(This one looks especially evil)</p>
+<p>The result file contains base 64:<br><img src="/img/articles/challbrigittefriang/pascal_base64.png" srcset="/img/loading.gif" alt="Base64"></p>
+<p>Which is an base64 encoded image:<br><img src="/img/articles/challbrigittefriang/pascal_picture.png" srcset="/img/loading.gif" alt="Good picture"></p>
+<p>I that directory was a new webpage<br><img src="/img/articles/challbrigittefriang/pascal_4files.png" srcset="/img/loading.gif" alt="New webpage"></p>
+<p>And I stopped that challenge here.</p>
+<h2 id="Alphonse-Bertillon-Forensics"><a href="#Alphonse-Bertillon-Forensics" class="headerlink" title="Alphonse Bertillon - Forensics"></a>Alphonse Bertillon - Forensics</h2><p>An nginx log file was given to me.<br>And I had to find what the attackers IP is, he achieved to connect to the website, that’s all I knew.<br>So, i serched for multiple connection attempts, HTTP connection errors (such as 401)<br>But finally, it was in the user agent. The attacker used a browser called “Evil Browser”:<br><img src="/img/articles/challbrigittefriang/evil_browser.png" srcset="/img/loading.gif" alt="Evil Browser"><br>Here’s his IP address:<br><code>179.97.58.61</code></p>
+<p>Once given to Alphonse Bertillon, he gave me another file.<br><img src="/img/articles/challbrigittefriang/forensics_respnse.png" srcset="/img/loading.gif" alt="Alphonse response"></p>
+<p>Apparently there can be malwares hidden into that file.<br>This file was an 303Mo heavy jpg image. But the picture quality is really poor.<br>So I simply used binwalk to see if theres anything uncommon. And yeah, indeed :<br><img src="/img/articles/challbrigittefriang/forensics_binwalk.png" srcset="/img/loading.gif" alt="binwalk"></p>
+<p>So let’s use the same tool to get these files.<br><code>binwalk -e evil_country_landscape.jpg</code></p>
+<p>I got 7 files,<br><img src="/img/articles/challbrigittefriang/forensics.png" srcset="/img/loading.gif" alt="forensics terminal"></p>
+<p>And I had not a Windows Virtual Machine at this moment, so this is where I left.</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/writeup/">writeup</a>
+                    
+                      <a class="hover-with-bg" href="/tags/CTF/">CTF</a>
+                    
+                      <a class="hover-with-bg" href="/tags/challengecybersecfr/">challengecybersecfr</a>
+                    
+                      <a class="hover-with-bg" href="/tags/DGSE/">DGSE</a>
+                    
+                      <a class="hover-with-bg" href="/tags/ESIEE/">ESIEE</a>
+                    
+                  </div>
+                
+              </div>
+              
+
+		<br>
+		Share :  <a href="https://www.facebook.com/sharer/sharer.php?u=http://w01f.xyz/2020/11/11/Challenge-Brigitte-Friang-Entry/&t=Challenge%20Brigitte%20Friang%20-%20Entry" target="_blank" rel="noopener"> <i class="fa fa-facebook-square fa-2x"></i> | </a>   <a href="https://twitter.com/intent/tweet?text=%22Challenge%20Brigitte%20Friang%20-%20Entry%22%20http://w01f.xyz/2020/11/11/Challenge-Brigitte-Friang-Entry/%20via%20@hexojs" target="_blank" rel="noopener"> <i class="fa fa-twitter-square fa-2x"></i> | </a>   <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://w01f.xyz/2020/11/11/Challenge-Brigitte-Friang-Entry/&title=Challenge%20Brigitte%20Friang%20-%20Entry" target="_blank" rel="noopener"> <i class="fa fa-linkedin fa-2x"></i> </a>
+		<br>
+
+
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/11/Challenge-Brigitte-Friang-COROS-CTF/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Challenge Brigitte Friang - COROS CTF</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/07/PluWeSh/">
+                        <span class="hidden-mobile">PluWeSh</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+		
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "b70Y4vW45puW9piv90cgQhGG-MdYXbMMI",
+          app_key: "ccKemUSih2JTtCuBvaEm1jNy",
+          placeholder: "Write someting...",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "en",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="/" target="_blank" rel="nofollow noopener"><span>w01f</span></a>
+      <i class="iconfont icon-love"></i>
+      2020
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Challenge Brigitte Friang - Entry&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 80,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'UA-101896722-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+    <!-- Google gtag.js -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-MM7R4WW"></script>
+    <script defer>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-MM7R4WW');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>
