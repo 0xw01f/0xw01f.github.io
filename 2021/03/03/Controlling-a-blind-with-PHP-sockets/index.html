@@ -22,7 +22,7 @@
   <meta name="description" content="A blog about computer science and more. You can find some original projects as well as CTF writeups for challenges !">
   <meta name="author" content="w01f">
   <meta name="keywords" content="blog IT cybersecurity programing coding tutorial CTF writeup security">
-  <title>Steganography - It&#39;s outside the box - w01f</title>
+  <title>Controlling a blind with PHP sockets - w01f</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -153,7 +153,7 @@
 </nav>
 
     <div class="banner intro-2" id="background" parallax=true
-         style="background: url('/img/articles/OutBoxSteg/background.png') no-repeat center center;
+         style="background: url('/img/articles/ETH-IO32B/banner.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-16 01:53" pubdate>
-        January 16, 2021 am
+      <time datetime="2021-03-03 10:57" pubdate>
+        March 3, 2021 am
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      941 words
+      721 words
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      18
+      14
        min.
     </span>
   
@@ -230,35 +230,112 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto" id="post">
             <!-- SEO header -->
-            <h1 style="display: none">Steganography - It&#39;s outside the box</h1>
+            <h1 style="display: none">Controlling a blind with PHP sockets</h1>
             
             <div class="markdown-body" id="post-body">
-              <p>A few months ago I take part to a CTF, like usually I learned a lot of cool tricks and tips. But there was one steganography challenge which I found awesome.<br>I use to search in the exifs of a picture, check relevant strings, or try binwalk and other tools on it… But this is another way to hide informations in a picture (or from a picture, you’ll see).</p>
-<p>I will try to show you as good as possible how this works, and even how to create that challenge by your own :)</p>
-<p>First of all, this is for PNG images only, it works with GIFs as well and JPG I don’t think so.</p>
-<p>We only had a picture like this one :<br><img src="https://i.imgur.com/gOqSz7a.png" srcset="/img/loading.gif" alt="In The Box"><br>(This isn’t the image from the challenge I did)</p>
-<p>There is no hidden stuff in the picture above, because this technique corrupts the image data. If you wanna try to solve the challenge anyway, <a target="_blank" rel="noopener" href="https://gofile.io/d/NxrTWE">I uploaded it on gofile</a>.</p>
-<p>When you see a suspicious PNG image, I recommend to verify that it is actually a PNG image and that everything works fine. You can use <a target="_blank" rel="noopener" href="http://www.libpng.org/pub/png/apps/pngcheck.html">PNGCheck</a> to do that.</p>
-<p>As you can see here, there is a CRC error for the IHDR Chunk.Because he calculated the CRC checksum as <code>CBD6DF8A</code> but he found (and it should be) <code>C798A151</code> in the PNG data.<br><img src="https://i.imgur.com/pNj22bG.png" srcset="/img/loading.gif" alt="PNGCheck Result CRC error in IHDR Chunk"><br>If you wanna learn more about PNG Headers, I recommend <a target="_blank" rel="noopener" href="http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html">this</a>. To learn more about other headers, for GIF or JPG images, take a look at <a target="_blank" rel="noopener" href="https://medium.com/ios-os-x-development/prefetching-images-size-without-downloading-them-entirely-in-swift-5c2f8a6f82e9">this article</a>.<br>Also, you won’t be able to open the picture in Linux, due to that error.<br><img src="https://i.imgur.com/vJqHkff.png" srcset="/img/loading.gif" alt="CRC error on linux"></p>
-<p>The best thing to do now will be fixing that image, I can tell you two different methods in order to do that. It depends on if you wanna learn something or if you just wanna use tools that do some obscure things…<br>Anyway, I’m gonna start with the coolest one !</p>
-<h2 id="The-cool-method"><a href="#The-cool-method" class="headerlink" title="The cool method"></a>The cool method</h2><p>So, as PNGCheck says, it found <code>CBD6DF8A</code> as checksum in the image data, but it computed another checksum.<br>You probably want to know what <strong>image data</strong> is and what that <strong>checksum</strong> is about.</p>
-<p>The image data is reprensented in hexadecimal here, I created a transparent 10x10 pixel image to show you what it looks like.<br><img src="https://i.imgur.com/mLu5mIO.png" srcset="/img/loading.gif" alt="10x10 pixel transparent image"><br><em>you can use <a target="_blank" rel="noopener" href="https://hexed.it/">this website</a> to do that</em></p>
-<p>The middle bloc is the data in hexadecimal, that’s what we are looking for.<br>Each image has a signature to identify what image it is (PNG, JPG, GIF, …) and dome chunks.<br>Our PNG image contains a first chunk called <strong>IHDR</strong> chunk, and it contains<br>|                    |      |<br>|———————    |———    |<br>| Width                   | 4 bytes     |<br>| Height                  | 4 bytes     |<br>| Bit depth               | 1 byte      |<br>| Color type              | 1 byte      |<br>| Compression method      | 1 byte      |<br>| Filter method           | 1 byte      |<br>| Interlace method        | 1 byte      |</p>
-<p>It can be represented like this for a better comprehension:<br><img src="https://i.imgur.com/yWkt0C6.png" srcset="/img/loading.gif" alt="PNG Signature"><br><em>stolen from <a target="_blank" rel="noopener" href="https://medium.com/ios-os-x-development/prefetching-images-size-without-downloading-them-entirely-in-swift-5c2f8a6f82e9">here</a></em></p>
-<p>The rest of the data isn’t relevant for us in this case.</p>
-<p>If you look at the different informations in the IHDR chunk, you can see a CRC checksum at the end with a size of 4 bytes. This checksum is computed using the data in the IHDR chunk.<br>In our picture this chunk is corrupted, to repair it we just have to replace the expected checksum (<code>C798A151</code>) with the computed one (<code>CBD6DF8A</code>).<br><img src="https://i.imgur.com/ABZriA5.png" srcset="/img/loading.gif" alt="Before"><br><img src="https://i.imgur.com/l6uNw2V.png" srcset="/img/loading.gif" alt="After"></p>
-<p>Now the image should be repaired.<br>But we still have no information about hidden data…</p>
-<p>As I told you, the CRC checksum is computed using data like the height, width, bit depth, etc..<br>If the CRC checksum changed, that means that one (ore more) of these parameters changed too.<br>The easyest thing to verify are the dimensions of the image. </p>
-<p><img src="https://i.imgur.com/wJFZgxL.png" srcset="/img/loading.gif" alt="Dimensions Bytes"><br>These bytes define the image dimensions.<br>since it is a square, obviously the bytes are the same. The size, in hexadecimal, is <code>1F4</code>.<br>To convert that to decimal, you can use a hex to decimal converter like <a target="_blank" rel="noopener" href="https://www.rapidtables.com/convert/number/hex-to-decimal.html">this one</a>.<br><code>1F4</code> is equal to 500pixels.<br><img src="https://i.imgur.com/Jftz6no.png" srcset="/img/loading.gif" alt="Hex to decimal"><br>If we take a look at the iamge dimensions, indeed, it is 500x500 pixels<br><img src="https://i.imgur.com/xc5p3EA.png" srcset="/img/loading.gif" alt="Image Dimensions"></p>
-<p>So, we want to increase these dimensions, we just have to convert a decimal value to hex.<br>I am gonna choose twice the initial size, 1000px.<br><img src="https://i.imgur.com/caiw7LX.png" srcset="/img/loading.gif" alt="Decimal to Hex"></p>
-<p>And replace <code>1F4</code> from the height with <code>3E8</code> in out image. I choose only the height here, because I already know what data I have to change. Otherwise I would play around a little bit, to find out what I have to change.</p>
-<p><img src="https://i.imgur.com/ajca3MV.png" srcset="/img/loading.gif" alt="New height bytes"><br>Now, save the image.</p>
-<p>And…<br><img src="https://i.imgur.com/tLwvX1y.png" srcset="/img/loading.gif" alt="OutBox"><br><em>Awesome.</em></p>
-<h2 id="The-fast-method"><a href="#The-fast-method" class="headerlink" title="The fast method"></a>The fast method</h2><p>Of course, there are some tools to do all this much faster.<br>If you have an error with a PNG image, you can try to fix it using <a target="_blank" rel="noopener" href="https://github.com/sherlly/PCRT">PCRT</a>.<br>It is very easy to use.<br><img src="https://i.imgur.com/iT2tZiU.png" srcset="/img/loading.gif" alt="PCRT"></p>
-<p>Once you fiwed the errors, there is an nice tool called <a target="_blank" rel="noopener" href="http://entropymine.com/jason/tweakpng/">TweakPNG</a> to examine and modify PNG images.</p>
-<p>You just have to load the image and change the dimensions in the IHDR chunk.<br><img src="https://i.imgur.com/2uuPAgl.png" srcset="/img/loading.gif" alt="TweakPNG example"></p>
-<h2 id="How-to-make-one"><a href="#How-to-make-one" class="headerlink" title="How to make one"></a>How to make one</h2><p>Another fun thing is to re create a challenge.<br>This part is very easy, take an image and place your hidden content on it.<br>Now you know how to change the image dimensions, you can reverse the process and decrease the wanted dimensions.<br>But, please don’t use this method to hide sensitive data, that’s security by obscurity and so it’s not safe. Encrypting your data is always the best solution, however you can combine both.</p>
-<p>If you wonder if you can send that image to a friend.<br>Only if the CRC chunk is repaired, you can upload your image on imgur and share it.<br>The hidden data will remain in the image. If you try to upload it to instagram, or messenger it won’t work.</p>
+              <h1 id="Controlling-a-blind-with-php-sockets"><a href="#Controlling-a-blind-with-php-sockets" class="headerlink" title="Controlling a blind with php sockets"></a>Controlling a blind with php sockets</h1><p>One of my school projects was to control the blind of an enterprise using only a webpage and an ethernet connected relay board.<br>I had to use the ETH-IO32B board from <a target="_blank" rel="noopener" href="http://wifipower.fr/fr/controlboard/75-eth-io32b.html">EKO électronique</a>. Which is way too expensive in my opinion.<br>Anyway, the webpage had to be hosted on a Raspberry Pi, this website contains some buttons to control the blind.</p>
+<h2 id="Prepare-the-Raspberry-Pi"><a href="#Prepare-the-Raspberry-Pi" class="headerlink" title="Prepare the Raspberry Pi."></a>Prepare the Raspberry Pi.</h2><p>My first goal was to install LAMP (Apache MySQL PHP bundle for Linux) on the Raspberry Pi, which permitted me to transform my Raspberry Pi into a webserver, and make a webpage available on the LAN.</p>
+<p>Then I had to figure out how the ETH-IO board work. Hopefully I already had its local IP address.</p>
+<p>To control the board I could have used the web interface created by the ETH-IO board (which is available by navigating to the boards IP address on port 9999, or 9998). But I am only using two relays out of the eight available.<br>In order to do that I had to use UDP sockets with PHP.</p>
+<p>To create a socket I used the <code>socket_create()</code> function.<br>This function needs three parameters, which are :</p>
+<ul>
+<li>domain</li>
+<li>type</li>
+<li>protocol<br>And I used <code>AF_INET</code> for IPv4<br><code>SOCK_DGRAM</code> to support datagrams (for UDP)<br>and <code>udp</code> as the protocol.</li>
+</ul>
+<p>Once the socket was created, I had to send it using <code>socket_sendto()</code>. This function contains six parameters :</p>
+<ul>
+<li>Socket created with <code>socket_create()</code></li>
+<li>Data<ul>
+<li>To activate the first relay, I had to send <code>SwitchDIGOUT0</code> to the ETH-IO board. And <code>SwitchDIGOUT1</code> to activate the second one. </li>
+</ul>
+</li>
+<li>Data Length in bytes (using simply <code>strlen()</code>)</li>
+<li>Flags ( 0 )</li>
+<li>IPv4 address (192.168.1.211)</li>
+<li>Port number (9998)</li>
+</ul>
+<p>Once the socket was sent, it need to be closed using <code>socket_close()</code>.</p>
+<p>This is the PHP function I created to control the blinds.</p>
+<div class="hljs"><pre><code class="hljs php"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">send_to_ethio</span>(<span class="hljs-params">$relay</span>) </span>&#123;
+    $socket = socket_create(AF_INET , SOCK_DGRAM , SOL_UDP);
+        <span class="hljs-keyword">if</span>($socket &lt; <span class="hljs-number">0</span>)
+        &#123;
+            <span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;Erreur: cannot create socket.&#x27;</span>;
+            <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
+        &#125;
+    $dest_addr = <span class="hljs-string">&#x27;192.168.1.211&#x27;</span>;
+    $dest_port = <span class="hljs-string">&#x27;9998&#x27;</span>; 
+    $donnees = $relay;
+    $data_lengh = strlen($donnees); 
+    $envoi = socket_sendto($socket, $donnees, $data_lengh, <span class="hljs-number">0</span>, $dest_addr, $dest_port);
+    socket_close($socket);
+    &#125;</code></pre></div>
+
+
+<p>I only had to add some HTML and CSS for the buttons, and then it looked really nice (no):</p>
+<p><img src="https://i.imgur.com/0Or6gin.png" srcset="/img/loading.gif" alt="Control center"></p>
+<p>We have one button to change (switch) the position of the blind, and another one to stop (and restart) it whenever we want.</p>
+<p>I also had to create a socket to receive some information from the ETH-IO board. But I had not enough time, and I don’t have this board anymore…</p>
+<p>If you want an idea of what the entire system looked like, here is a simple schematic :<br><img src="https://i.imgur.com/O0PDuPx.png" srcset="/img/loading.gif" alt="System schematic"><br>Of course you can have my entire source code</p>
+<p>Here you have my HTML :</p>
+<div class="hljs"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>ETHIO<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+    
+    <span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;background-color: #2f2f2f; color:whitesmoke&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">header</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Control center<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+
+
+        <span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;scrollable&quot;</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>Change position: <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;bouton&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Change&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;swi_btn&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>Start/Stop position : <span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;bouton&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Start/Stop&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;arr_btn&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre></div>
+
+<p>And there is my PHP :</p>
+<div class="hljs"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">&#x27;swi_btn&#x27;</span>]))
+&#123;
+    send_to_ethio(<span class="hljs-string">&#x27;SwitchDIGOUT1&#x27;</span>);
+&#125;
+
+<span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">&#x27;arr_btn&#x27;</span>]))
+&#123;
+    send_to_ethio(<span class="hljs-string">&#x27;SwitchDIGOUT0&#x27;</span>);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">send_to_ethio</span>(<span class="hljs-params">$relay</span>) </span>&#123;
+    $socket = socket_create(AF_INET , SOCK_DGRAM , SOL_UDP);
+        <span class="hljs-keyword">if</span>($socket &lt; <span class="hljs-number">0</span>)
+        &#123;
+            <span class="hljs-keyword">echo</span> <span class="hljs-string">&#x27;Erreur: cannot create socket.&#x27;</span>;
+            <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
+        &#125;
+    $dest_addr = <span class="hljs-string">&#x27;192.168.1.211&#x27;</span>;
+    $dest_port = <span class="hljs-string">&#x27;9998&#x27;</span>; 
+    $data = $relay;
+    $data_lengh = strlen($data); 
+    $envoi = socket_sendto($socket, $data, $data_lengh, <span class="hljs-number">0</span>, $dest_addr, $dest_port);
+    socket_close($socket);
+    &#125;
+        
+<span class="hljs-meta">?&gt;</span></code></pre></div>
+
+<p>I hope this will help you if, one day, you have to use the ETH-IO32B relay board.</p>
+<p>ETH-IO32B user manual - <a target="_blank" rel="noopener" href="http://wifipower.fr/fr/index.php?controller=attachment&amp;id_attachment=20">http://wifipower.fr/fr/index.php?controller=attachment&amp;id_attachment=20</a></p>
+<p>Official website - <a target="_blank" rel="noopener" href="https://www.eko-fpga.com/">https://www.eko-fpga.com/</a></p>
 
             </div>
             <hr>
@@ -269,11 +346,13 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/writeup/">writeup</a>
+                      <a class="hover-with-bg" href="/tags/automation/">automation</a>
                     
-                      <a class="hover-with-bg" href="/tags/CTF/">CTF</a>
+                      <a class="hover-with-bg" href="/tags/PHP/">PHP</a>
                     
-                      <a class="hover-with-bg" href="/tags/steaganography/">steaganography</a>
+                      <a class="hover-with-bg" href="/tags/hardware/">hardware</a>
+                    
+                      <a class="hover-with-bg" href="/tags/project/">project</a>
                     
                   </div>
                 
@@ -281,7 +360,7 @@
               
 
 		<br>
-		Share :  <a href="https://www.facebook.com/sharer/sharer.php?u=http://w01f.xyz/2021/01/16/Steganography-It-s-outside-the-box/&t=Steganography%20-%20It's%20outside%20the%20box" target="_blank" rel="noopener"> <i class="fa fa-facebook-square fa-2x"></i> | </a>   <a href="https://twitter.com/intent/tweet?text=%22Steganography%20-%20It's%20outside%20the%20box%22%20http://w01f.xyz/2021/01/16/Steganography-It-s-outside-the-box/%20via%20@hexojs" target="_blank" rel="noopener"> <i class="fa fa-twitter-square fa-2x"></i> | </a>   <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://w01f.xyz/2021/01/16/Steganography-It-s-outside-the-box/&title=Steganography%20-%20It's%20outside%20the%20box" target="_blank" rel="noopener"> <i class="fa fa-linkedin fa-2x"></i> </a>
+		Share :  <a href="https://www.facebook.com/sharer/sharer.php?u=http://w01f.xyz/2021/03/03/Controlling-a-blind-with-PHP-sockets/&t=Controlling%20a%20blind%20with%20PHP%20sockets" target="_blank" rel="noopener"> <i class="fa fa-facebook-square fa-2x"></i> | </a>   <a href="https://twitter.com/intent/tweet?text=%22Controlling%20a%20blind%20with%20PHP%20sockets%22%20http://w01f.xyz/2021/03/03/Controlling-a-blind-with-PHP-sockets/%20via%20@hexojs" target="_blank" rel="noopener"> <i class="fa fa-twitter-square fa-2x"></i> | </a>   <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://w01f.xyz/2021/03/03/Controlling-a-blind-with-PHP-sockets/&title=Controlling%20a%20blind%20with%20PHP%20sockets" target="_blank" rel="noopener"> <i class="fa fa-linkedin fa-2x"></i> </a>
 		<br>
 
 
@@ -290,9 +369,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/03/03/Controlling-a-blind-with-PHP-sockets/">
+                      <a href="/2021/03/03/Hacking-Android-7-s-Easter-Egg/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Controlling a blind with PHP sockets</span>
+                        <span class="hidden-mobile">Hacking Android 7's Easter Egg</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -300,8 +379,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/03/How-a-mobile-network-is-connected-to-the-Internet/">
-                        <span class="hidden-mobile">How a mobile network is connected to the Internet</span>
+                      <a href="/2021/01/16/Steganography-It-s-outside-the-box/">
+                        <span class="hidden-mobile">Steganography - It's outside the box</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -476,7 +555,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Steganography - It's outside the box&nbsp;",
+        "Controlling a blind with PHP sockets&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 80,

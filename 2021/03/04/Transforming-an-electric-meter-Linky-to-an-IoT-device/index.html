@@ -1,0 +1,1114 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link href="css/stars.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="A blog about computer science and more. You can find some original projects as well as CTF writeups for challenges !">
+  <meta name="author" content="w01f">
+  <meta name="keywords" content="blog IT cybersecurity programing coding tutorial CTF writeup security">
+  <title>Transforming an electric meter (Linky) to an IoT device - w01f</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/hybrid.min.css" />
+    
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-101896722-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-101896722-2');
+</script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>w01f</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/articles/LinkyProject/banner.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container page-header text-center fade-in-up">
+
+	   
+ 	 
+
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-04 23:32" pubdate>
+        March 4, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.7k words
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      93
+       min.
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+	<div id="stars-fade">
+            <div id="stars"></div>
+            <div id="stars2"></div>
+            <div id="stars3"></div>
+       </div>
+
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Transforming an electric meter (Linky) to an IoT device</h1>
+            
+            <div class="markdown-body" id="post-body">
+              <h1 id="Transforming-an-electric-meter-Linky-to-an-IoT-device"><a href="#Transforming-an-electric-meter-Linky-to-an-IoT-device" class="headerlink" title="Transforming an electric meter (Linky) to an IoT device"></a>Transforming an electric meter (Linky) to an IoT device</h1><p>I want to show you one of my biggest projects, which I made for my last year of my “higher national diploma” (BTS in French). It consisted into creating a connected electric meter using the ‘Linky’ which is a smart meter deployed by Enedis. It is installed almost everywhere in France now.</p>
+<p>In my team we where almost four students (depends on the point of view).<br>The mayor of a city with about 5500 people asked us to create a system he could deploy on some of the Linky’s in his city. And he wanted to be able to see the consumption in real time of each of these electric meters on a webpage and a mobile application.<br><img src="https://i.imgur.com/DPmChBE.png" srcset="/img/loading.gif" alt="Test system"></p>
+<p>I’m gonna use the pictures I put in my report, but I cannot put everything in one article because it has about 69 pages… sorry.</p>
+<p><img src="https://i.imgur.com/P54FVT5.jpg" srcset="/img/loading.gif" alt="Global datagram"></p>
+<h2 id="Used-equipment"><a href="#Used-equipment" class="headerlink" title="Used equipment"></a>Used equipment</h2><p>A certain material was imposed on us for our project.</p>
+<ul>
+<li>A development board which is capable of UART (serial) communication</li>
+<li>A LoRa antenna, because we had to use the LoRa protocol</li>
+<li>A web server</li>
+<li>A LoRa Gateway</li>
+</ul>
+<p>Some of the Linky electric meters and a TIC (Télé-Information Client) were also provided to us to make some tests.</p>
+<p>To get some informationsI had sent on the USB serial port of the Raspberry Pi.<br>This can be done with PuTTY (<code>sudo apt install putty</code>). With PuTTY we can communicate with a serial port. In my case I used ttyS0 which was the USB port. And the baudrate was 9600 bauds.to connect the TIC to L1 and L   2 (picture below).<br><img src="https://i.imgur.com/SQ1ZlwW.png" srcset="/img/loading.gif" alt="Teleinformation outputs Linky"></p>
+<h2 id="The-LoRa-protocol-and-network"><a href="#The-LoRa-protocol-and-network" class="headerlink" title="The LoRa protocol and network"></a>The LoRa protocol and network</h2><p><a target="_blank" rel="noopener" href="https://www.semtech.com/lora">LoRa</a> is a Low power protocol with a high range, also called a LPWAN (Low Power Wide-Area Network) but a low bandwidth. This means that less data can be transmitted at once, but it is transmitted way further.<br>As the 4G network (<a href="https://w01f.xyz/2021/01/03/How-a-mobile-network-is-connected-to-the-Internet/">I explained here</a> how this works), LoRa need an antenna to send data and some gateways which are directly connected to the internet to collect this data and send it… somewhere..</p>
+<p>Usually on TheThingsNetwork (TTN).</p>
+<p>Range and bandwidth comparison with other technologies.<br><img src="https://i.imgur.com/HGek1mM.png" srcset="/img/loading.gif" alt="Lora diagram"></p>
+<p><code>Note: Sigfox can be an alternative to LoRa</code></p>
+<p><a target="_blank" rel="noopener" href="https://www.sigfox.com/en">Sigfox</a></p>
+<p>The LoRa technology uses 868MHz for the communication between a device and a gateway, and Internet to connect the gateway to the internet. The strong point of this technology is its low power consumption and its ability to penetrate walls, and it can also be used under ground.</p>
+<h2 id="Labor-division"><a href="#Labor-division" class="headerlink" title="Labor division"></a>Labor division</h2><p>This project has been parted into four parts :</p>
+<ul>
+<li>Collecting the data sent by the Linky, process it, send it to TTN and store it into a database and make it available using a Rest API</li>
+<li>Collecting the data from the database and make it available on the website (backend web development)</li>
+<li>Creating the website (front-end web development) and manage the webserver</li>
+<li>Creating a mobile app to display the data on a mobile device</li>
+</ul>
+<p>Initially I only had to to the first part, but I finished my job pretty early so… I also did the three other parts, for fun..</p>
+<h2 id="UML-amp-Diagrams"><a href="#UML-amp-Diagrams" class="headerlink" title="UML &amp; Diagrams"></a>UML &amp; Diagrams</h2><p>Here are some UML diagrams someone in my group draw, and they are pretty nice.</p>
+<p>Deployment Diagram<br><img src="https://i.imgur.com/7tSLKTx.png" srcset="/img/loading.gif" alt="deployment diagram"></p>
+<p>Use Case Diagram<br><img src="https://i.imgur.com/TI0esrs.png" srcset="/img/loading.gif" alt="Use Case Diagram"></p>
+<p>Sequence Diagram<br><img src="https://i.imgur.com/BPxToXC.png" srcset="/img/loading.gif" alt="Sequence Diagram"></p>
+<h2 id="Collect-process-and-send-the-consumption-data"><a href="#Collect-process-and-send-the-consumption-data" class="headerlink" title="Collect process and send the consumption data"></a>Collect process and send the consumption data</h2><p>The first step was to collect the power consumption data using the serial connections from the Linky and read this data with a python program on a Raspberry Pi.<br>The TIC is only useful to convert the outgoing data from L1 &amp; L2 into USB data.</p>
+<p>The TIC, connected to a three phase Linky and to the Raspberry Pi :<br><img src="https://i.imgur.com/tJGjY3z.png" srcset="/img/loading.gif" alt="TIC teleinformation three phase linky"></p>
+<p>The contacts are not the same on a single phase electric meter and a three phase electric meter.<br>Luckily I have both at home, so I was able to compare them.<br><img src="https://i.imgur.com/6G0ZYJC.png" srcset="/img/loading.gif" alt="Comparison single phase and three phase"></p>
+<p>The cable you see on the three phase Linky was connected to the TIC, which is connected via USB to the Raspberry Pi. (A Raspberry Pi is like a micro computer)<br>I connected a Lora module to the GPIO pins of the Raspberry Pi. I used the LoraWAN module from Atim (ARM-N8-LRW). It was hard as hell to find out how to configure it with the gateway, and link the gateway to TTN… but I’m still alive, so.. It was not that terrible.</p>
+<p>Here you can see my Raspberry Pi equiped with the LoRa hat, and connected to the Linky via USB.</p>
+<p><img src="https://i.imgur.com/CqaBZLq.png" srcset="/img/loading.gif" alt="Raspberry Pi with Atim LoRa module hat"></p>
+<p>Once the TIC was connected to the Raspberry Pi, I was able to check if some interesting information were sent on the USB serial port of the Raspberry Pi.<br>This can be done with PuTTY (<code>sudo apt install putty</code>). With PuTTY we can communicate with a serial port. In my case I used ttyUSB0 which was the USB port. And the speed was 9600 bauds.</p>
+<p><img src="https://i.imgur.com/wsxtFNh.png" srcset="/img/loading.gif" alt="Putty config for serial port"></p>
+<p>Yes it’s /dev/tty0 on the screen, but it just depends on the serial port you use.</p>
+<p><code>Note: The Linky has two different operation modes :</code></p>
+<ul>
+<li>Historic mode (1200 bauds) doesn’t send the time with the power consumption</li>
+<li>Standard mode (9600 bauds) sends the time with the power consumption</li>
+</ul>
+<p>And the sent data is not exactly formatted in the same way…</p>
+<p>Also, the single phase Linky doesn’t send the same information than the three phase Linky, indeed the latter also gives us the power consumption for each phase.</p>
+<p>I used three different Linky meters, and one of them was in historic mode, it was a little bit confusing at the beginning but I just had to change the baudrate and process the data otherwise.</p>
+<p>Here is the raw data the Linky sent to the Raspberry Pi.<br><img src="https://i.imgur.com/v6wipZN.png" srcset="/img/loading.gif" alt="raw serial data from linky"><br>This data is sent continuously on L1 and L2.</p>
+<p>Luckily the Linky is well documented on this point, and it’s pretty easy to see what each piece of information corresponds to.</p>
+<p>I only had to send the <strong>identification number</strong> of the electric meter, the <strong>date</strong>, the <strong>total power consumption</strong> and the <strong>live power consumption</strong>.</p>
+<p>Here are these main information and their ‘identifier’ :</p>
+<ul>
+<li><strong>ADSC</strong>: electric meter ID</li>
+<li><strong>DATE</strong>: date</li>
+<li><strong>EAST</strong>: total power consumption</li>
+<li><strong>SINSTS</strong>: real time power consumption</li>
+</ul>
+<p>This first part was pretty easy. Now I knew what I had to collect I was able to create my Python script.</p>
+<p>I used Python because it is incredibly easy to work with serial ports with it. Here is my code, firstly i’m only listening for the data and displaying int in a terminal.</p>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span>
+<span class="hljs-keyword">import</span> serial <span class="hljs-comment">#To use serial ports</span>
+
+ ser = serial.Serial(
+ port=<span class="hljs-string">&#x27;/dev/ttyUSB0&#x27;</span>, 
+ baudrate = <span class="hljs-number">1200</span>, 
+ parity=serial.PARITY_EVEN, 
+ stopbits=serial.STOPBITS_ONE, 
+ bytesize=serial.SEVENBITS, 
+ timeout=<span class="hljs-number">1</span>)
+ 
+ counter=<span class="hljs-number">0</span>
+ timeout = time.time() + <span class="hljs-number">3</span> 
+ <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span> : 
+
+    <span class="hljs-keyword">if</span> time.time() &gt; timeout: 
+        <span class="hljs-keyword">break</span> 
+    x = ser.readline()
+    data_str = (str(x)) 
+ <span class="hljs-keyword">print</span> (data) 
+ ser.close() <span class="hljs-comment"># close serial</span></code></pre></div>
+
+<p>This is what I got using my script :<br><img src="https://i.imgur.com/4Ie8vbq.png" srcset="/img/loading.gif" alt="Terminal output of serial data using python"></p>
+<p>Now I had to parse all this data, in order to do that I used some Regex ().</p>
+<p>Here’s an example using <a target="_blank" rel="noopener" href="https://regex101.com/">Regex 101</a> :<br><img src="https://i.imgur.com/FHatzwN.png" srcset="/img/loading.gif" alt="Regex example"></p>
+<p>SINSTS is our power consumption in real time (here you can see it was 0Wh).<br>With regex I tell the computer that I want all the data between the green and the orange highlighted stuff, so only the red highlighted information.<br>Also, you can see that the red highlighted information is in Group 2, this will be useful in my Python script.</p>
+<p>Here’s how to retrieve this data in Python :</p>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re
+<span class="hljs-comment"># Here I put the regular expression I use</span>
+regex = <span class="hljs-string">r&quot;(SINSTS\\t)(.*.)(\\t,*.*)&quot;</span>
+<span class="hljs-comment"># test_str in a single part of the raw data from the Linky</span>
+test_str = <span class="hljs-string">&quot;b&#x27;SINSTS\\t00000\\tF\\r\\n&#x27;&quot;</span>
+
+<span class="hljs-comment"># checking for matches in the raw data, which matches the regular expression</span>
+matches = re.finditer(regex, test_str, re.MULTILINE)
+
+<span class="hljs-keyword">for</span> matchNum, match <span class="hljs-keyword">in</span> enumerate(matches, start=<span class="hljs-number">1</span>):
+
+    groupNum = <span class="hljs-number">2</span> <span class="hljs-comment"># Our group N°2 !!</span>
+    datalive = (<span class="hljs-string">&quot;&#123;group&#125;&quot;</span>.format(group = match.group(groupNum)))
+    <span class="hljs-comment"># Now I can print each group 2 data that was found in the raw data using the regular expression</span>
+    print(datalive)
+</code></pre></div>
+
+<p>Are here’s the result :<br><img src="https://i.imgur.com/lFf5kPq.png" srcset="/img/loading.gif" alt="Regex script result"></p>
+<p>Now I had to do this for each information I needed.<br>So I did this:</p>
+<div class="hljs"><pre><code class="hljs python">reg_conso_live = <span class="hljs-string">r&quot;PAPP ([0-9][0-9]+)&quot;</span>
+
+<span class="hljs-comment"># If not in standart mode use the line below</span>
+ <span class="hljs-comment">#reg_date = r&quot;(DATE\\t)(([eEhH])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9]))(\\t\\t,*.*)&quot;</span>
+
+ reg_conso_tot = <span class="hljs-string">r&quot;BASE ([0-9][0-9]+)&quot;</span> 
+ reg_id = <span class="hljs-string">r&quot;ADCO ([0-9]*)&quot;</span> 
+ matches = re.finditer(reg_id, data_str, re.MULTILINE) 
+
+ <span class="hljs-keyword">for</span> matchNum, match <span class="hljs-keyword">in</span> enumerate(matches, start=<span class="hljs-number">1</span>):
+ groupNum = <span class="hljs-number">1</span> 
+ dataid = (<span class="hljs-string">&quot;&#123;group&#125;-&quot;</span>.format(group = match.group(groupNum))) 
+
+ matches = re.finditer(reg_conso_live, data_str, re.MULTILINE)
+ <span class="hljs-keyword">for</span> matchNum, match <span class="hljs-keyword">in</span> enumerate(matches, start=<span class="hljs-number">1</span>):
+ groupNum = <span class="hljs-number">1</span>
+ datalive = (<span class="hljs-string">&quot;&#123;group&#125;-&quot;</span>.format(group = match.group(groupNum)))
+
+ matches = re.finditer(reg_conso_tot, data_str, re.MULTILINE) 
+ <span class="hljs-keyword">for</span> matchNum, match <span class="hljs-keyword">in</span> enumerate(matches, start=<span class="hljs-number">1</span>):
+ groupNum = <span class="hljs-number">1</span>
+ datatot = (<span class="hljs-string">&quot;&#123;group&#125;&quot;</span>.format(group = match.group(groupNum)))
+
+ data = dataid + datalive + datatot 
+
+ <span class="hljs-keyword">print</span> (<span class="hljs-string">&quot;Données: &quot;</span> + data)</code></pre></div>
+<p>The output of this code:</p>
+<p><img src="https://i.imgur.com/vWub7S6.png" srcset="/img/loading.gif" alt="Python all data regex"></p>
+<p>Once this was done, I had to sent all this information to The Things Network (TTN).</p>
+<p>Before I coded something, I had to verify if I can communicate with the Atim LoRa module. To do this, AT commands are used. It also uses a serial port to communicate, so I just used PuTTY again.<br>The module was connected on <strong>/dev/tty0</strong> (GPIO) with a baudrate of 19200.<br>This is how I configured PuTTY :</p>
+<p><strong><code>But I had some problems with /dev/tty0 (You&#39;ll see it later), and had to use /dev/ttyAMA0</code> just remember to try both</strong></p>
+<p><img src="https://i.imgur.com/KH1zjRg.png" srcset="/img/loading.gif" alt="PuTTY configuration AT commands"></p>
+<p>This will open a new terminal, you’ll have to send ‘+++’ in it.<br>At the beginning I tried it several times, changing the baudrate, the serial port but it didn’t work.</p>
+<p>This is <strong>IMPORTANT</strong>, my LoRa module needed to be powered on GPIO 7 to power on the module.<br>Everytime I used the commands </p>
+<p><code>gpio mode 7 OUT</code></p>
+<p><code>gpio write 7 1</code> </p>
+<p>The GPIO pin returned to IN…</p>
+<p><img src="https://i.imgur.com/rfqJRwc.png" srcset="/img/loading.gif" alt="GPIO7 OUT to IN"></p>
+<p>This took me days to solve. The <strong>solution</strong> (I think, I’m not absolutely sure) was to export the GPIO pins at the Raspberry Pi’s startup using the rc.local file.</p>
+<p><img src="https://i.imgur.com/zUKAR0v.png" srcset="/img/loading.gif" alt="Export GPIO in rc.local file"></p>
+<p>This forced GPIO 7 to stay as IN.</p>
+<p>Once this was done I was able to send ‘+++’ into the terminal.<br><img src="https://i.imgur.com/slKGAUd.png" srcset="/img/loading.gif" alt="AT command confirmation PuTTY"></p>
+<p>And I was able to enter some AT commands, such as :</p>
+<ul>
+<li><strong>ATM002=14</strong> -&gt; <em>LED blinks when data is send</em></li>
+<li><strong>ATO077=22</strong> -&gt; <em>Set frequency to 868.5 MHz</em></li>
+<li><strong>AT$SF=XX</strong> -&gt; <em>Send XX as payload</em></li>
+</ul>
+<p>Now I was able to send data with my Raspberry Pi. But I had to intercept this data using a Gateway and send it to TTN.</p>
+<p>This is the gateway I used <a target="_blank" rel="noopener" href="https://www.nemeus.fr/product/indoor-gateway/">Nemeus Gateway LoRa</a></p>
+<p>Probably not the best choice, but it worked not that bad, once it worked.<br>Some parameters I used :<br><img src="https://i.imgur.com/NY3sNG8.png" srcset="/img/loading.gif" alt="Nemeus gateway parameters"></p>
+<p>I connected the Gateway to the TTN server :<br><img src="https://i.imgur.com/7F6dOJx.png" srcset="/img/loading.gif" alt="Nemeus gateway The Things Network connection"></p>
+<p>And finally I registered my Atim LoRa module on the Gateway :<br><img src="https://i.imgur.com/zK7QWzM.png" srcset="/img/loading.gif" alt="Device list Nemeus"></p>
+<p>When the Gateway was connected to the internet it didn’t work because of some firewalls and proxies, but once it worked I saw the Gateway connected on TTN :<br><img src="https://i.imgur.com/RqVaAsc.png" srcset="/img/loading.gif" alt="Gateway connected on TTN"></p>
+<p>On The Things Network I had to create a new ‘Application’ and add a device to it. Take care that you enter the correct keys that come with the LoRa module (Atim).</p>
+<p>Now everything should be configured to receive some data.</p>
+<p>This looks pretty easy but that was the part where I have killed myself a few times.</p>
+<p>To send some data I use the AT command ‘<strong>AT$SF=AABB</strong>‘ (AABB is my payload in Hexadecimal).<br><img src="https://i.imgur.com/NhqJgQ4.png" srcset="/img/loading.gif" alt="Atim documentation AT commands"></p>
+<p>Now was another problem.</p>
+<p>When I sent the data with that AT command, the LoRa module blinked which means that the data has been sent correctly. But TTN displayed only some ‘join request’ (yellow lightning).</p>
+<p><img src="https://i.imgur.com/rh6G06s.png" srcset="/img/loading.gif" alt="Join requests TTN"></p>
+<p>This means that my module asked TTN if it can send some data, but TTN didn’t respond.</p>
+<p>I did all my tests on the <code>tty0</code> serial port, but I had to use <code>tty AMA0</code>.</p>
+<blockquote>
+<p>I changed that in the <code>/boot/config.txt</code> file by adding <code>dtoverlay=pi3- disable-bt</code> to disable bluetooth which was on the port I used.<br>And I also did the <code>sudo systemctl disable hciuart</code> command.</p>
+</blockquote>
+<p>But all this didn’t work either.</p>
+<p>So I decided to reset my LoRa module to the factory default settings.</p>
+<p>This can be done with the <strong>ATF</strong> AT command.</p>
+<p>I also changed ABP to OTAA. (Change this in TTN as well)<br>Here are some other AT commands I did :</p>
+<ul>
+<li><strong>ATM002=14</strong> -&gt; Turn LED ON when data is send</li>
+<li><strong>ATO083=0B</strong> -&gt; Set OTAA</li>
+<li><strong>ATO075=11</strong> -&gt; Use SF11</li>
+<li><strong>ATO076=01</strong> -&gt; Set Signal strenght to 14 dbm</li>
+<li><strong>ATO077=22</strong> -&gt; Set frequency to 868500 Hz </li>
+<li><strong>ATO086=F4</strong> -&gt; Use a 4 time speed factor</li>
+</ul>
+<p>Changing these settings may mean that they also have to be changed in the Gateway settings, check that they are the same.</p>
+<p>To save your configuration enter the <code>ATOS</code> command.</p>
+<p>Then restart the module by changing GPIO 7 to 0 and then to 1.</p>
+<p><code>gpio write 7 0</code></p>
+<p><code>gpio write 7 1</code></p>
+<p>After several configuration tests (that took me to the above setup), I finally got some new information on TTN.</p>
+<p>To view the entire configuration of the Atim LoRa module you can enter the following commands :</p>
+<ul>
+<li>ATLO</li>
+<li>ATLM</li>
+</ul>
+<p>I give you my configuration, because this one worked for me :<br><img src="https://i.imgur.com/HKG8b1W.png" srcset="/img/loading.gif" alt="Atim config ATLO"><br><img src="https://i.imgur.com/o4GoWVt.png" srcset="/img/loading.gif" alt="Atim config ATLM"></p>
+<p>Now I (FINALLY) got some ‘Join Accept’ responses !<br>(The green lightnings)</p>
+<p><img src="https://i.imgur.com/Rrc31Pw.png" srcset="/img/loading.gif" alt="Join accept responses TTN"></p>
+<p>This is what happened han I sent some data using <code>AT$SF=...</code> :<br><img src="https://i.imgur.com/u6NqklN.png" srcset="/img/loading.gif" alt="TTN application data receiving"></p>
+<p>Before the first ‘Activation’ data appears in Application Data, about four acknowledgements are made between the LoRa module and TTN. Which are a ‘join request’ and a ‘join accept’.</p>
+<p>When I plugged an electric heater on the Linky, that was about 2000W, I was able to see its live consumption using my python script.<br><img src="https://i.imgur.com/5gK4S1u.png" srcset="/img/loading.gif" alt="Live power consumption using a heater"></p>
+<p>It was time to write the third and final part of my Python script.<br>This part was like the first one, but instead of listening and receiving data, this one sends the processed data to the LoRa module.</p>
+<div class="hljs"><pre><code class="hljs python">sera = serial.Serial( <span class="hljs-comment"># New serial connection</span>
+ port=<span class="hljs-string">&#x27;/dev/ttyAMA0&#x27;</span>, <span class="hljs-comment"># This time I used the ttyAMA0 port</span>
+ baudrate = <span class="hljs-number">19200</span>, <span class="hljs-comment"># Using 19200 bauds as speed</span>
+ )
+ sera.write(data.encode())
+ <span class="hljs-keyword">print</span> (<span class="hljs-string">&quot;Done.&quot;</span>)
+ sera.close() <span class="hljs-comment"># Closing serial connection</span></code></pre></div>
+
+
+<p> Now I have the three main steps of my python code :</p>
+<ul>
+<li><p>Retrieving data</p>
+</li>
+<li><p>Processing data</p>
+</li>
+<li><p>Sending data</p>
+<p>For some power saving raisons I added a 1hour timer to this code.<br><img src="https://i.imgur.com/JumupLP.png" srcset="/img/loading.gif" alt="Program diagram"></p>
+<p>I then created a function called ‘read_send’ and put parts of my code in it, added a timer and some lines of code :</p>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span>
+<span class="hljs-keyword">from</span> time <span class="hljs-keyword">import</span> sleep
+<span class="hljs-keyword">import</span> datetime
+<span class="hljs-keyword">import</span> time <span class="hljs-comment">#Pour faire des pauses dans le programme et utiliser le temps</span>
+<span class="hljs-keyword">import</span> serial <span class="hljs-comment">#Pour utiliser les ports série</span>
+<span class="hljs-keyword">import</span> re <span class="hljs-comment">#Pour utiliser les expressions régulières (regex)</span>
+
+
+
+serza = serial.Serial( <span class="hljs-comment">#Je crée une nouvelle connexion série</span>
+    port=<span class="hljs-string">&#x27;/dev/ttyAMA0&#x27;</span>, <span class="hljs-comment">#J&#x27;utilise le port AMA0 pour envoyer les données cette fois-ci</span>
+    baudrate = <span class="hljs-number">19200</span>, <span class="hljs-comment">#Je définis la vitesse de transmission à 19200, car le module LoRa utilise ce baud pour communiquer</span>
+    )
+
+serza.write(<span class="hljs-string">b&#x27;RpI connecte Pret a envoyer&#x27;</span>) <span class="hljs-comment">#J&#x27;envoie les données sur le port série, et je les encode en bytes pour que elles soient prise en charge</span>
+serza.close() <span class="hljs-comment">#Je ferme le port série utilisé</span>
+
+
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_send</span>():</span> 
+    <span class="hljs-comment">#========================================</span>
+    <span class="hljs-comment">#=====[ PARTIE LECTURE DES DONNEES ]=====</span>
+    <span class="hljs-comment">#========================================</span>
+
+    <span class="hljs-comment">#Ici on définit les paramètres que on va utiliser pour communiquer avec le port d&#x27;entrée du raspberry</span>
+    ser = serial.Serial(
+    port=<span class="hljs-string">&#x27;/dev/ttyUSB0&#x27;</span>, <span class="hljs-comment">#Pour les tests, au début j&#x27;ai connecté le raspberry en USB, on utilise donc sur ce port</span>
+    baudrate = <span class="hljs-number">9600</span>, <span class="hljs-comment">#La vitesse de transmission (doit être adaptée au récepteur/émetteur des données!)</span>
+    parity=serial.PARITY_EVEN, <span class="hljs-comment">#Méthode de détection des erreurs de transmission définie à &quot;Even&quot; (signifie que le bit de parité est défini de sorte que le nombre de &quot;logiques&quot; doit être pair)</span>
+    stopbits=serial.STOPBITS_ONE, <span class="hljs-comment">#Bit d&#x27;arrêt</span>
+    bytesize=serial.SEVENBITS, <span class="hljs-comment">#Définit à 7bytes (pour avoir de l&#x27;ASCII)</span>
+    
+    timeout=<span class="hljs-number">1</span>
+    )
+    counter=<span class="hljs-number">0</span>
+
+    timeout = time.time() + <span class="hljs-number">3</span> <span class="hljs-comment"># Délai de 3 secondes</span>
+        
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span> : <span class="hljs-comment">#boucle qui durera 3 secondes</span>
+    
+        <span class="hljs-keyword">if</span> time.time() &gt; timeout: <span class="hljs-comment">#Si les 3 secondes sont passées </span>
+            <span class="hljs-keyword">break</span>                <span class="hljs-comment">#Alors on sort de la boucle While</span>
+
+        
+        x = ser.readline() <span class="hljs-comment">#On définit une variable x </span>
+        data_str = (str(x))<span class="hljs-comment">#On convertit les données récupérées en string, pour pouvoir mieux les maipuler plus tard</span>
+        
+        <span class="hljs-comment">#On utilise les expressions régulières (Regex) pour extraire uniquement les données souhaitées de toutes celles que l&#x27;on reçoit</span>
+        reg_conso_live = <span class="hljs-string">r&quot;(SINSTS\\t)(.*.)(\\t,*.*)&quot;</span> <span class="hljs-comment">#Pour la consommation en direct</span>
+        reg_date = <span class="hljs-string">r&quot;(DATE\\t)(([eEhH])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9]))(\\t\\t,*.*)&quot;</span> <span class="hljs-comment">#Pour la date du compteur Linky</span>
+        reg_conso_tot = <span class="hljs-string">r&quot;(EAST\\t)(.*.)(\\t,*.*)&quot;</span> <span class="hljs-comment">#Pour la consommation totale</span>
+        reg_id = <span class="hljs-string">r&quot;(ADSC\\t)(.*.)(\\t,*.*)&quot;</span> <span class="hljs-comment">#Pour L&#x27;identifiant du compteur</span>
+
+
+        matches = re.finditer(reg_id, data_str, re.MULTILINE) <span class="hljs-comment">#On regarde dans les données que on a récupéré du compteur Linky (data_str), on spécifie comment récupérer les données avec Regex (reg_id)</span>
+        <span class="hljs-keyword">for</span> matchNum, match <span class="hljs-keyword">in</span> enumerate(matches, start=<span class="hljs-number">1</span>):   <span class="hljs-comment">#Pour chaque résultat qui concorde avec ce que on recherche ...</span>
+            groupNum = <span class="hljs-number">2</span>
+                                                            
+            dataid = (<span class="hljs-string">&quot;&#123;group&#125;-&quot;</span>.format(group = match.group(groupNum))) <span class="hljs-comment">#On assigne à la variable dataid la valeur récupérée dans le groupe avec &#123;group&#125;, puis on spécifie l&#x27;index de la donnée, nous prendrons 2, </span>
+                                                                      
+                                                                        
+        matches = re.finditer(reg_conso_live, data_str, re.MULTILINE) <span class="hljs-comment">#Pareil que au dessus, même index, une seule valeur à récupérer</span>
+        <span class="hljs-keyword">for</span> matchNum, match <span class="hljs-keyword">in</span> enumerate(matches, start=<span class="hljs-number">1</span>):
+            groupNum = <span class="hljs-number">2</span>
+            datalive = (<span class="hljs-string">&quot;&#123;group&#125;-&quot;</span>.format(group = match.group(groupNum)))
+            
+        matches = re.finditer(reg_conso_tot, data_str, re.MULTILINE) <span class="hljs-comment">#Pareil que au dessus, même index, une seule valeur à récupérer</span>
+        <span class="hljs-keyword">for</span> matchNum, match <span class="hljs-keyword">in</span> enumerate(matches, start=<span class="hljs-number">1</span>):
+            groupNum = <span class="hljs-number">2</span>
+            datatot = (<span class="hljs-string">&quot;&#123;group&#125;-&quot;</span>.format(group = match.group(groupNum)))    
+            
+            
+        matches = re.finditer(reg_date, data_str, re.MULTILINE) <span class="hljs-comment">#Ici on récupère plusieurs valeurs (7 valeurs)</span>
+        <span class="hljs-keyword">for</span> matchNum, match <span class="hljs-keyword">in</span> enumerate(matches, start=<span class="hljs-number">1</span>):     <span class="hljs-comment">#ça du coup ne change pas</span>
+                                                                
+            datadate = (<span class="hljs-string">&quot;&#123;saison&#125; 20&#123;annee&#125;/&#123;mois&#125;/&#123;jour&#125; &#123;heure&#125;:&#123;minute&#125;:&#123;seconde&#125;&quot;</span>.format(saison = match.group(<span class="hljs-number">3</span>), annee = match.group(<span class="hljs-number">4</span>), mois = match.group(<span class="hljs-number">5</span>), jour = match.group(<span class="hljs-number">6</span>), heure = match.group(<span class="hljs-number">7</span>), minute = match.group(<span class="hljs-number">8</span>), seconde = match.group(<span class="hljs-number">9</span>)))    
+
+        
+    data = dataid + datalive + datatot + datadate <span class="hljs-comment">#On crée la variable data et on lui assigne l&#x27;ensemble des valeurs récupérées</span>
+
+    <span class="hljs-keyword">print</span> (<span class="hljs-string">&quot;Données: &quot;</span> + data) <span class="hljs-comment">#J&#x27;affiche les données que je vais envoyer avec le port série dans la console, pour avoir un aperçu de ce que j&#x27;envoie</span>
+    ser.close() <span class="hljs-comment">#Je ferme le port d&#x27;écoute du port série</span>
+
+    <span class="hljs-comment">#========================================</span>
+    <span class="hljs-comment">#======[ PARTIE ENVOI DES DONNEES ]======</span>
+    <span class="hljs-comment">#========================================</span>
+
+    sera = serial.Serial( <span class="hljs-comment">#Je crée une nouvelle connexion série</span>
+    port=<span class="hljs-string">&#x27;/dev/ttyAMA0&#x27;</span>, <span class="hljs-comment">#J&#x27;utilise le port AMA0 pour envoyer les données cette fois-ci</span>
+    baudrate = <span class="hljs-number">19200</span>, <span class="hljs-comment">#Je définis la vitesse de transmission à 19200, car le module LoRa utilise ce baud pour communiquer</span>
+
+
+    )
+
+    sera.write(data.encode()) <span class="hljs-comment">#J&#x27;envoie les données sur le port série, et je les encode en bytes pour que elles soient prise en charge</span>
+    <span class="hljs-keyword">print</span> (<span class="hljs-string">&quot;Fini.&quot;</span>) <span class="hljs-comment">#J&#x27;affiche avoir fini la transmission des données, pour m&#x27;éssurer que tout a bien fonctionné</span>
+    sera.close() <span class="hljs-comment">#Je ferme le port série utilisé</span>
+    
+
+read_send()
+sleep(<span class="hljs-number">60</span>*(<span class="hljs-number">60</span>-datetime.datetime.now().minute))
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+    read_send()
+    sleep(<span class="hljs-number">60</span>*<span class="hljs-number">2</span>)</code></pre></div>
+
+<p>If you use this code take care of the baudrate and the type of electric meter you are using (this one should be for standard mode).</p>
+<p>Put the data on TTN’s Database</p>
+</li>
+</ul>
+<hr>
+<p> The Things Network offers a data storage where we can store our data fome some days (about a week). I used this feature to store our power consumption information.</p>
+<p> <img src="https://i.imgur.com/8ptIZNn.png" srcset="/img/loading.gif" alt="TTN data storage"></p>
+<p>This service also offers a RESTFUL API provided by Swagger which makes the retrieving of data from the TTN database way easier.<br><img src="https://i.imgur.com/gN5kDZJ.png" srcset="/img/loading.gif" alt="Swagger REST API"></p>
+<p>You will have to enter your TTN secret key to give Swagger some permissions.</p>
+<p>To test the api I used<a target="_blank" rel="noopener" href="https://insomnia.rest/">Insomnia</a> as REST client, but you can also use <a target="_blank" rel="noopener" href="https://www.postman.com/">Postman</a>.</p>
+<p>I created a ‘GET’ request and put my TTN secret key in the header.</p>
+<p><img src="https://i.imgur.com/O9DTvos.png" srcset="/img/loading.gif" alt="Secret key insomnia request header"></p>
+<p>And here’s my data :</p>
+<p><img src="https://i.imgur.com/DPmChBE.png" srcset="/img/loading.gif" alt="API data"></p>
+<p>This is JSON which is very nice because I like to work with it.<br>The REST API was working. But I had one last thing to do in my part, start the python script when the Raspberry Py boots.</p>
+<p>I had some issues with my rc.local file, and I decided to use cronjobs to handle this.<br>With cron I was also able to have some logs of what happens.</p>
+<p>My part was now finished. But as I said, I also did the other parts because I had enough time for it. And there is no reason I don’t show you the entire project !<br>But I will be quick on this, because it’s mainly just some code.</p>
+<p>I simply created a table with a design I probably found on <a target="_blank" rel="noopener" href="https://codepen.io/">Codepen</a> and I used <a target="_blank" rel="noopener" href="https://developers.google.com/chart">Google charts</a> to have some nice line charts and pie charts, and connected it to my database.<br>I created another page to retrieve the data from TTN’s database using the REST API.</p>
+<p>Here is the code if you’re interested :<br>(I don’t have the google charts anymore, and the database isn’t available anymore, so I was not able to verify it..)</p>
+<div class="hljs"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+  
+  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span> /&gt;</span>
+ 
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;./css/styles.css&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">?php</span></span>
+<span class="hljs-tag">//<span class="hljs-attr">Connexion</span> à <span class="hljs-attr">la</span> <span class="hljs-attr">BDD</span></span>
+<span class="hljs-tag">      $<span class="hljs-attr">connect</span> = <span class="hljs-string">mysqli_connect(</span>&quot;<span class="hljs-attr">localhost</span>&quot;, &quot;<span class="hljs-attr">root</span>&quot;, &quot;&quot;, &quot;<span class="hljs-attr">consommation</span>&quot;);</span>
+<span class="hljs-tag">      $<span class="hljs-attr">connect-</span>&gt;</span>set_charset(&quot;utf8&quot;);
+//Commande à utiliser selon ce que on veut afficher
+      $query = mysqli_query($connect, &quot;SELECT * FROM releve ORDER BY id&quot;);
+
+ ?&gt; 
+
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;height: 400px;&quot;</span>&gt;</span>
+
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;demo&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Dashboard<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- Responsive table starts here --&gt;</span>
+    <span class="hljs-comment">&lt;!-- For correct display on small screens you must add &#x27;data-title&#x27; to each &#x27;td&#x27; in your table --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;table-responsive-vertical shadow-z-1&quot;</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- Table starts here --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;table&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;table table-hover table-mc-light-blue&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Date<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Linky ID<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Live<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Total<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">?php</span> <span class="hljs-attr">while</span>($<span class="hljs-attr">row</span> = <span class="hljs-string">$query-</span>&gt;</span>fetch_array())&#123; ?&gt;
+            <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">data-title</span>=<span class="hljs-string">&quot;ID&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">?php</span> <span class="hljs-attr">echo</span> $<span class="hljs-attr">row</span>[&#x27;<span class="hljs-attr">id</span>&#x27;] ?&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">data-title</span>=<span class="hljs-string">&quot;Date&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">?php</span> <span class="hljs-attr">echo</span> $<span class="hljs-attr">row</span>[&#x27;<span class="hljs-attr">date</span>&#x27;] ?&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">data-title</span>=<span class="hljs-string">&quot;Linky ID&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">?php</span> <span class="hljs-attr">echo</span> $<span class="hljs-attr">row</span>[&#x27;<span class="hljs-attr">id_compteur</span>&#x27;] ?&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">data-title</span>=<span class="hljs-string">&quot;Live&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">?php</span> <span class="hljs-attr">echo</span> $<span class="hljs-attr">row</span>[&#x27;<span class="hljs-attr">conso_live</span>&#x27;] ?&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">data-title</span>=<span class="hljs-string">&quot;Total&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">?php</span> <span class="hljs-attr">echo</span> $<span class="hljs-attr">row</span>[&#x27;<span class="hljs-attr">conso_total</span>&#x27;] ?&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">?php</span> &#125; ?&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre></div>
+<p>For the css file :</p>
+<div class="hljs"><pre><code class="hljs css">
+<span class="hljs-selector-tag">h1</span>&#123;
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">30px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#fff</span>;
+  <span class="hljs-attribute">text-transform</span>: uppercase;
+  <span class="hljs-attribute">font-weight</span>: <span class="hljs-number">300</span>;
+  <span class="hljs-attribute">text-align</span>: center;
+  <span class="hljs-attribute">margin-bottom</span>: <span class="hljs-number">15px</span>;
+&#125;
+<span class="hljs-selector-tag">table</span>&#123;
+  <span class="hljs-attribute">width</span>:<span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">table-layout</span>: fixed;
+&#125;
+<span class="hljs-selector-class">.tbl-header</span>&#123;
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">0.3</span>);
+ &#125;
+<span class="hljs-selector-class">.tbl-content</span>&#123;
+  <span class="hljs-attribute">height</span>:<span class="hljs-number">300px</span>;
+  <span class="hljs-attribute">overflow-x</span>:auto;
+  <span class="hljs-attribute">margin-top</span>: <span class="hljs-number">0px</span>;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-built_in">rgba</span>(<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">0.3</span>);
+&#125;
+<span class="hljs-selector-tag">th</span>&#123;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">20px</span> <span class="hljs-number">15px</span>;
+  <span class="hljs-attribute">text-align</span>: left;
+  <span class="hljs-attribute">font-weight</span>: <span class="hljs-number">500</span>;
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#fff</span>;
+  <span class="hljs-attribute">text-transform</span>: uppercase;
+&#125;
+<span class="hljs-selector-tag">td</span>&#123;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">15px</span>;
+  <span class="hljs-attribute">text-align</span>: left;
+  <span class="hljs-attribute">vertical-align</span>:middle;
+  <span class="hljs-attribute">font-weight</span>: <span class="hljs-number">300</span>;
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#fff</span>;
+  <span class="hljs-attribute">border-bottom</span>: solid <span class="hljs-number">1px</span> <span class="hljs-built_in">rgba</span>(<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">0.1</span>);
+&#125;
+
+
+<span class="hljs-comment">/* demo styles */</span>
+
+<span class="hljs-keyword">@import</span> url(<span class="hljs-attribute">https:</span>//fonts.googleapis.com/css?family=<span class="hljs-attribute">Roboto:</span><span class="hljs-number">400</span>,<span class="hljs-number">500</span>,<span class="hljs-number">300</span>,<span class="hljs-number">700</span>);
+<span class="hljs-selector-tag">body</span>&#123;
+  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">-webkit-linear-gradient</span>(left, #<span class="hljs-number">25</span>c481, #<span class="hljs-number">25</span>b7c4);
+  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">linear-gradient</span>(to right, #<span class="hljs-number">25</span>c481, #<span class="hljs-number">25</span>b7c4);
+  <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&#x27;Roboto&#x27;</span>, sans-serif;
+&#125;
+<span class="hljs-selector-tag">section</span>&#123;
+  <span class="hljs-attribute">margin</span>: <span class="hljs-number">50px</span>;
+&#125;
+
+
+<span class="hljs-comment">/* follow me template */</span>
+<span class="hljs-selector-class">.made-with-love</span> &#123;
+  <span class="hljs-attribute">margin-top</span>: <span class="hljs-number">40px</span>;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">10px</span>;
+  <span class="hljs-attribute">clear</span>: left;
+  <span class="hljs-attribute">text-align</span>: center;
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">10px</span>;
+  <span class="hljs-attribute">font-family</span>: arial;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#fff</span>;
+&#125;
+<span class="hljs-selector-class">.made-with-love</span> <span class="hljs-selector-tag">i</span> &#123;
+  <span class="hljs-attribute">font-style</span>: normal;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#F50057</span>;
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">14px</span>;
+  <span class="hljs-attribute">position</span>: relative;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">2px</span>;
+&#125;
+<span class="hljs-selector-class">.made-with-love</span> <span class="hljs-selector-tag">a</span> &#123;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#fff</span>;
+  <span class="hljs-attribute">text-decoration</span>: none;
+&#125;
+<span class="hljs-selector-class">.made-with-love</span> <span class="hljs-selector-tag">a</span><span class="hljs-selector-pseudo">:hover</span> &#123;
+  <span class="hljs-attribute">text-decoration</span>: underline;
+&#125;
+
+
+<span class="hljs-comment">/* for custom scrollbar for webkit browser*/</span>
+
+<span class="hljs-selector-pseudo">::-webkit-scrollbar</span> &#123;
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">6px</span>;
+&#125; 
+<span class="hljs-selector-pseudo">::-webkit-scrollbar-track</span> &#123;
+    <span class="hljs-attribute">-webkit-box-shadow</span>: inset <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">6px</span> <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0.3</span>); 
+&#125; 
+<span class="hljs-selector-pseudo">::-webkit-scrollbar-thumb</span> &#123;
+    <span class="hljs-attribute">-webkit-box-shadow</span>: inset <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">6px</span> <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0.3</span>); 
+&#125;</code></pre></div>
+
+<p>The PHP file to call the API, get the JSON data, ase and display it :</p>
+<div class="hljs"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span>
+
+$curl = curl_init();
+
+curl_setopt_array($curl, <span class="hljs-keyword">array</span>(
+  CURLOPT_URL =&gt; <span class="hljs-string">&quot;https://xxxxxxxx.data.thethingsnetwork.org/api/v2/query?last=20h&quot;</span>,
+  CURLOPT_RETURNTRANSFER =&gt; <span class="hljs-literal">true</span>,
+  CURLOPT_ENCODING =&gt; <span class="hljs-string">&quot;&quot;</span>,
+  CURLOPT_MAXREDIRS =&gt; <span class="hljs-number">10</span>,
+  CURLOPT_TIMEOUT =&gt; <span class="hljs-number">30</span>,
+  CURLOPT_HTTP_VERSION =&gt; CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST =&gt; <span class="hljs-string">&quot;GET&quot;</span>,
+  CURLOPT_POSTFIELDS =&gt; <span class="hljs-string">&quot;&quot;</span>,
+  CURLOPT_HTTPHEADER =&gt; <span class="hljs-keyword">array</span>(
+    <span class="hljs-string">&quot;accept: application/json&quot;</span>,
+    <span class="hljs-string">&quot;authorization: key ttn-account-v2.O-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;</span>,
+    <span class="hljs-string">&quot;content-type: multipart/form-data; boundary=---011000010111000001101001&quot;</span>
+  ),
+));
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+<span class="hljs-keyword">if</span> ($err) &#123;
+  <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;cURL Error #:&quot;</span> . $err;
+&#125; <span class="hljs-keyword">else</span> &#123;
+
+    <span class="hljs-comment">//On décode le Json et on affiche toutes les valeurs contenant &quot;data&quot;</span>
+    $data = json_decode($response, <span class="hljs-literal">true</span>);    
+    <span class="hljs-keyword">foreach</span> ($data <span class="hljs-keyword">as</span> $emp) &#123;
+         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>($emp[<span class="hljs-string">&#x27;data&#x27;</span>]) <span class="hljs-keyword">or</span> !<span class="hljs-keyword">empty</span>($emp[<span class="hljs-string">&#x27;data&#x27;</span>])) &#123;
+             $objet_data = explode(<span class="hljs-string">&quot;-&quot;</span>, $emp[<span class="hljs-string">&#x27;data&#x27;</span>]);
+
+
+             <span class="hljs-comment">//ID du compteur</span>
+             <span class="hljs-keyword">echo</span> $objet_data[<span class="hljs-number">0</span>].<span class="hljs-string">&quot;&lt;br/&gt;&quot;</span>;
+             <span class="hljs-comment">//Consommation actuelle en Wh, à convertir en kWh ?</span>
+             <span class="hljs-keyword">echo</span> $objet_data[<span class="hljs-number">1</span>].<span class="hljs-string">&quot;&lt;br/&gt;&quot;</span>;
+             <span class="hljs-comment">//Consommation totale en Wh, à convertir en kWh ?</span>
+             <span class="hljs-keyword">echo</span> $objet_data[<span class="hljs-number">2</span>].<span class="hljs-string">&quot;&lt;br/&gt;&quot;</span>;
+             <span class="hljs-comment">//Date du compteur, à supprimer</span>
+             <span class="hljs-keyword">echo</span> $objet_data[<span class="hljs-number">3</span>].<span class="hljs-string">&quot;&lt;br/&gt;&quot;</span>;
+             <span class="hljs-comment">//Date de The Things Network</span>
+             <span class="hljs-keyword">echo</span> date(<span class="hljs-string">&#x27;Y-m-d H:i:s&#x27;</span>, strtotime(substr($emp[<span class="hljs-string">&#x27;time&#x27;</span>],<span class="hljs-number">0</span>,<span class="hljs-number">19</span>))).<span class="hljs-string">&quot;&lt;br/&gt;&quot;</span>;
+             
+             <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;br/&gt;&quot;</span>;
+         &#125;
+        
+             
+&#125;
+
+&#125;</code></pre></div>
+
+<h2 id="Mobile-application"><a href="#Mobile-application" class="headerlink" title="Mobile application"></a>Mobile application</h2><p>Using an extra app to display the data from our database wasn’t really useful in my opinion (And I didn’t know how to program an android app). That’s because I cheated and I decided to simply use a webview to display the webpage in an app.<br>I don’t have the code for this anymore, but it is very easy to make :)</p>
+<p>I hope you enjoyed this little post that took me only 5 hours to write, and of course you can contact me if you have some questions about it !</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/automation/">automation</a>
+                    
+                      <a class="hover-with-bg" href="/tags/PHP/">PHP</a>
+                    
+                      <a class="hover-with-bg" href="/tags/hardware/">hardware</a>
+                    
+                      <a class="hover-with-bg" href="/tags/project/">project</a>
+                    
+                      <a class="hover-with-bg" href="/tags/mobile/">mobile</a>
+                    
+                      <a class="hover-with-bg" href="/tags/script/">script</a>
+                    
+                  </div>
+                
+              </div>
+              
+
+		<br>
+		Share :  <a href="https://www.facebook.com/sharer/sharer.php?u=http://w01f.xyz/2021/03/04/Transforming-an-electric-meter-Linky-to-an-IoT-device/&t=Transforming%20an%20electric%20meter%20(Linky)%20to%20an%20IoT%20device" target="_blank" rel="noopener"> <i class="fa fa-facebook-square fa-2x"></i> | </a>   <a href="https://twitter.com/intent/tweet?text=%22Transforming%20an%20electric%20meter%20(Linky)%20to%20an%20IoT%20device%22%20http://w01f.xyz/2021/03/04/Transforming-an-electric-meter-Linky-to-an-IoT-device/%20via%20@hexojs" target="_blank" rel="noopener"> <i class="fa fa-twitter-square fa-2x"></i> | </a>   <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://w01f.xyz/2021/03/04/Transforming-an-electric-meter-Linky-to-an-IoT-device/&title=Transforming%20an%20electric%20meter%20(Linky)%20to%20an%20IoT%20device" target="_blank" rel="noopener"> <i class="fa fa-linkedin fa-2x"></i> </a>
+		<br>
+
+
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/03/Hacking-Android-7-s-Easter-Egg/">
+                        <span class="hidden-mobile">Hacking Android 7's Easter Egg</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+		
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    function loadValine() {
+      addScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "b70Y4vW45puW9piv90cgQhGG-MdYXbMMI",
+          app_key: "ccKemUSih2JTtCuBvaEm1jNy",
+          placeholder: "Write someting...",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "en",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    }
+    waitElementVisible('vcomments', loadValine);
+  </script>
+  <noscript>Please enable JavaScript to view the <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="/" target="_blank" rel="nofollow noopener"><span>w01f</span></a>
+      <i class="iconfont icon-love"></i>
+      2020
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '#post-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Transforming an electric meter (Linky) to an IoT device&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 80,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'UA-101896722-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+    <!-- Google gtag.js -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-MM7R4WW"></script>
+    <script defer>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GTM-MM7R4WW');
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+</body>
+</html>

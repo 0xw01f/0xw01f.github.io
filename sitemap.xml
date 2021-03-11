@@ -7,6 +7,27 @@
             
   
   <url>
+    <loc>http://w01f.xyz/2021/03/04/Transforming-an-electric-meter-Linky-to-an-IoT-device/</loc>
+    
+    <lastmod>2021-03-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/2021/03/03/Hacking-Android-7-s-Easter-Egg/</loc>
+    
+    <lastmod>2021-03-03</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/2021/03/03/Controlling-a-blind-with-PHP-sockets/</loc>
+    
+    <lastmod>2021-03-03</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://w01f.xyz/2021/01/16/Steganography-It-s-outside-the-box/</loc>
     
     <lastmod>2021-01-16</lastmod>
@@ -65,120 +86,148 @@
 
   <url>
     <loc>http://w01f.xyz/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>http://w01f.xyz/tags/resources/</loc>
-    <lastmod>2021-01-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://w01f.xyz/tags/writeup/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://w01f.xyz/tags/tryhackme/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://w01f.xyz/tags/CTF/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <loc>http://w01f.xyz/tags/automation/</loc>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://w01f.xyz/tags/challengecybersecfr/</loc>
-    <lastmod>2021-01-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://w01f.xyz/tags/DGSE/</loc>
-    <lastmod>2021-01-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://w01f.xyz/tags/ESIEE/</loc>
-    <lastmod>2021-01-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://w01f.xyz/tags/powershell/</loc>
-    <lastmod>2021-01-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://w01f.xyz/tags/script/</loc>
-    <lastmod>2021-01-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://w01f.xyz/tags/digispark/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <loc>http://w01f.xyz/tags/PHP/</loc>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://w01f.xyz/tags/hardware/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://w01f.xyz/tags/project/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/android/</loc>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/reverse-engineering/</loc>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://w01f.xyz/tags/mobile/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://w01f.xyz/tags/networking/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://w01f.xyz/tags/4G/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/resources/</loc>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/CTF/</loc>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://w01f.xyz/tags/steaganography/</loc>
-    <lastmod>2021-01-16</lastmod>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/challengecybersecfr/</loc>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/DGSE/</loc>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/ESIEE/</loc>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/powershell/</loc>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/script/</loc>
+    <lastmod>2021-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://w01f.xyz/tags/digispark/</loc>
+    <lastmod>2021-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
